@@ -68,6 +68,7 @@ protected $middlewareAliases = [
     //agregar al final de las rutas
     'transform.request' => \Elyerr\ApiExtend\Middleware\TransformRequest::class,
 ];
+```
 
 Estructura de los transformadores
 
