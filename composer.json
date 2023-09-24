@@ -1,0 +1,40 @@
+{
+    "name": "elyerr/api-extend",
+    "description": "Proporciona funcionalidad extra a API bajo el framework Laravel",
+    "type": "library",
+    "license": "GPLv3",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Elyerr\\ApiExtend\\ApiExtendServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Elyerr\\ApiExtend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Elvis  Yerel Roman Concha",
+            "email": "yerel9212@yahoo.es"
+        }
+    ],
+    "require": {
+        "php": "^8.0.2",
+        "illuminate/support": "^10.24",
+        "illuminate/filesystem": "^10.24",
+        "illuminate/console": "^10.24",
+        "illuminate/http": "^10.24",
+        "illuminate/pagination": "^10.24",
+        "illuminate/database": "^10.24",
+        "illuminate/routing": "^10.24"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "laravel/sanctum": "^3.3",
+        "spatie/laravel-fractal": "^6.0"
+    }
+}

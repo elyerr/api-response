@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Elyerr\ApiExtend\Assets\Asset;
+use Illuminate\Database\Eloquent\Concerns\HasUuids; 
+use Illuminate\Database\Eloquent\Model;
+
+class Master extends Model
+{
+    use HasUuids, Asset; 
+
+    /**
+     * The data type of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id';
+}
