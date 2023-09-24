@@ -169,7 +169,7 @@ public function index(Accounting $accounting)
 ```
  
 ### Rutas
-rutas para administrar tokens y sesion de usuarios 
+rutas para administrar tokens y sesion de usuarios agregamos las siguientes rutas en el archivo **api.php** que esta ubicado en routes
 ```
 <?php
 
