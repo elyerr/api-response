@@ -1,5 +1,5 @@
 ## Api-Extend
-Extención para API bajo el framework de Laravel. Esta extención funciona usando **Sanctum** 
+Extensión para API bajo el framework de Laravel. Esta extensión funciona usando **Sanctum** 
 
 ## Instalar 
 `composer require elyerr/api-extend`
