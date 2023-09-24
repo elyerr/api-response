@@ -2,7 +2,7 @@
     "name": "elyerr/api-extend",
     "description": "Proporciona funcionalidad extra a API bajo el framework Laravel",
     "type": "library",
-    "license": "GPLv3",
+    "license": "AGPL-3.0-only",
     "extra": {
         "laravel": {
             "providers": [
