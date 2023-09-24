@@ -87,7 +87,7 @@ class ExampleTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            "new" => 'model_key', 
+            "new_key" => 'model_key', 
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -113,6 +113,34 @@ class ExampleTransformer extends TransformerAbstract
 }
 
 ```
+Cuando se requira validar o agregar datos masivos usando array el transformador debe esta confirgurado de la siguienta forma, tener en cuenta que esto aplica solo para los metodos **transformRequest** y **transformResponse** 
+```
+ public static function transformRequest($index)
+    {
+        $index = Asset::changeIndex($index);
+        
+        $attribute = [
+            "user.*.nombre" => "user.*.name", 
+            "user.*.apellido" => "user.*.last_name", 
+        ];
+
+        return isset($attribute[$index]) ? $attribute[$index] : null;
+    }
+
+    public static function transformResponse($index)
+    {
+        $index = Asset::changeIndex($index);
+
+        $attribute = [
+             "user.*.name" => "user.*.nombre",
+             "user.*.last_name" => "user.*.apellido"
+        ];
+
+        return isset($attribute[$index]) ? $attribute[$index] : null;
+    }
+
+```
+
 Dentro del modelo debemos agregar una propiedad con el transformador que permita aqceder desde cualquier parte
 
 ``` 
