@@ -76,7 +76,6 @@ Estructura de los transformadores
 class ExampleTransformer extends TransformerAbstract
 {
     use Asset;
-
     
     public function transform($data)
     {
@@ -114,9 +113,33 @@ class ExampleTransformer extends TransformerAbstract
 }
 
 ```
+Dentro del modelo debemos agregar una propiedad con el transformador que permita aqceder desde cualquier parte
 
+``` 
+public $transformer = AccountingTransformer::class;
+```
 
+Dentro del controlador se puede utilizar de la siguiente forma para transformar el metodo **store** y **update**
+```
+ public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('transform.request:' . ExampleTransformer::class)->only('store', 'update');
+    }
+```
+Para transformar los demas datos usando la propiedad en lugar de acceder a la clase del trasnformador
 
+```
+public function index(Accounting $accounting)
+    {
+        $params = $this->filter_transform($accounting->transformer);
+
+        $data = $this->search($accounting->table, $params);
+
+        return $this->showAll($data, $accounting->transformer, 201);
+    }
+```
+ 
 ### Rutas
 rutas para administrar tokens y sesion de usuarios 
 ```
