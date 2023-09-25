@@ -34,7 +34,7 @@ class DestroyAllTokenEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name' . $this->user->id);
+        return new PrivateChannel('channel-name' . '.' . $this->user->id);
     }
 
      /**
