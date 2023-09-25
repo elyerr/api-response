@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Auth;
 use Error;
 use Illuminate\Http\Request;
 use App\Exceptions\ReportError;
-use App\Http\Controllers\GlobalController; 
+use App\Events\Tokens\StoreTokenEvent;
+use App\Events\Tokens\DestroyTokenEvent;
+use App\Http\Controllers\GlobalController;
+use App\Events\Tokens\DestroyAllTokenEvent;
 
 class TokensController extends GlobalController
 {
@@ -38,6 +41,8 @@ class TokensController extends GlobalController
     {
         $token = $request->user()->createToken($request->user()->email . "|" . $_SERVER['HTTP_USER_AGENT']);
 
+        StoreTokenEvent::dispatch(request()->user());
+
         return response()->json(['token' => 'Bearer ' . $token->plainTextToken], 201);
     }
 
@@ -48,6 +53,8 @@ class TokensController extends GlobalController
     public function destroyAllTokens(Request $request)
     {
         $request->user()->tokens()->delete();
+
+        DestroyAllTokenEvent::dispatch(request()->user());
 
         return $this->message('Los Tokens fueron revocados.', 200);
     }
@@ -64,6 +71,8 @@ class TokensController extends GlobalController
             $token = $request->user()->tokens()->where('id', $id)->first();
 
             $token->delete();
+
+            DestroyTokenEvent::dispatch(request()->user());
 
             return $this->message('El token ha sido revocado.', 201);
 
