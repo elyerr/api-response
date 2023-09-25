@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Events\Tokens\LoginEvent;
-use App\Events\Tokens\LogoutEvent;
+use App\Events\Tokens\LogoutEvent; 
 use Illuminate\Routing\Controller;
-use App\Http\Requests\Auth\LoginRequest; 
+use App\Http\Requests\Auth\LoginRequest;
+use Elyerr\ApiExtend\Assets\JsonResponser;
 
 class AuthorizationController extends Controller
 {
+    use JsonResponser;
+
     public function __construct()
     {
         $this->middleware('guest')->only('store');
