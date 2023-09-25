@@ -4,8 +4,7 @@ namespace Elyerr\ApiExtend\Middleware;
 
 use Closure;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Auth;   
 
 class AuthenticateBroadcast
 {
@@ -36,7 +35,7 @@ class AuthenticateBroadcast
      */
     public function userID($token)
     {
-        $personalToken = PersonalAccessToken::findToken($token);
+        $personalToken = User::PersonalAccessToken($token);
 
         return $personalToken ? $personalToken->tokenable_id : null;
     }
