@@ -1,11 +1,9 @@
 <?php
 
 namespace Elyerr\ApiExtend;
-
-use Elyerr\ApiExtend\Controllers\TokensController;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Support\Facades\Route;
+ 
 use Illuminate\Support\ServiceProvider as Provider;
+use Illuminate\Contracts\Support\DeferrableProvider; 
 
 final class ApiExtendServiceProvider extends Provider implements DeferrableProvider
 {
