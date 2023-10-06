@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Tokens;
+namespace Elyerr\ApiExtend\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels; 
 
 
-class LoginEvent implements ShouldBroadcast
+class DestroyAllTokenEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -34,7 +34,7 @@ class LoginEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel(env('CHANNEL_NAME','test') . '.' . $this->user->id);
     }
 
      /**
@@ -44,6 +44,6 @@ class LoginEvent implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'LoginEvent';
+        return 'DestroyAllTokenEvent';
     }
 }

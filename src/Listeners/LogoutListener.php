@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners\Tokens;
-
-use App\Events\Tokens\LogoutEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
+namespace Elyerr\ApiExtend\Listeners;
+ 
+use Elyerr\ApiExtend\Events\LogoutEvent;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LogoutListener
 {

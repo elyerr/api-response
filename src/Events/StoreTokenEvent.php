@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\Tokens;
+namespace Elyerr\ApiExtend\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -34,7 +34,7 @@ class StoreTokenEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name' . '.' . $this->user->id);
+        return new PrivateChannel(env('CHANNEL_NAME','test') . '.' . $this->user->id);
     }
 
      /**

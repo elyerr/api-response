@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Listeners\Tokens;
-
-use App\Events\Tokens\DestroyAllTokenEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
+namespace Elyerr\ApiExtend\Listeners;
+ 
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Elyerr\ApiExtend\Events\DestroyAllTokenEvent;
 
 class DestroyAllTokenListener
 {

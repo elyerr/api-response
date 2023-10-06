@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Listeners\Tokens;
-
-use App\Events\Tokens\LoginEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
+namespace Elyerr\ApiExtend\Listeners;
+ 
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Elyerr\ApiExtend\Events\DestroyTokenEvent;
 
-class LoginListener
+class DestroyTokenListener
 {
     /**
      * Create the event listener.
@@ -19,7 +19,7 @@ class LoginListener
     /**
      * Handle the event.
      */
-    public function handle(LoginEvent $event): void
+    public function handle(DestroyTokenEvent $event): void
     {
         //
     }
