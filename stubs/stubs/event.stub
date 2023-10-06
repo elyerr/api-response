@@ -34,7 +34,7 @@ class {{ class }} implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new PrivateChannel(env('CHANNEL_NAME','test'));
     }
 
      /**
