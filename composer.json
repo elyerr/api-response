@@ -30,7 +30,8 @@
         "illuminate/pagination": "^10.24",
         "illuminate/database": "^10.24",
         "illuminate/routing": "^10.24",
-        "illuminate/broadcasting": "^10.26"
+        "illuminate/broadcasting": "^10.26",
+        "laravel-zero/foundation": "^10.26"
     },
     "minimum-stability": "dev",
     "prefer-stable": true    

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc789ce2b837b279485d0bba14bb7df4",
+    "content-hash": "655ebefde0675807b981c11bb40b22e1",
     "packages": [
         {
             "name": "brick/math",
@@ -1383,6 +1383,51 @@
                 "source": "https://github.com/laravel/framework"
             },
             "time": "2023-09-28T13:43:11+00:00"
+        },
+        {
+            "name": "laravel-zero/foundation",
+            "version": "v10.26.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-zero/foundation.git",
+                "reference": "56ca23fbc8536a627b22593a87af001c2a5e837c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/56ca23fbc8536a627b22593a87af001c2a5e837c",
+                "reference": "56ca23fbc8536a627b22593a87af001c2a5e837c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "10.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Illuminate/Foundation/helpers.php"
+                ],
+                "psr-4": {
+                    "Illuminate\\": "src/Illuminate/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "This is a mirror from illuminate/foundation.",
+            "keywords": [
+                "framework",
+                "laravel"
+            ],
+            "support": {
+                "source": "https://github.com/laravel-zero/foundation/tree/v10.26.2"
+            },
+            "time": "2023-10-06T09:46:41+00:00"
         },
         {
             "name": "laravel/prompts",
