@@ -2,10 +2,10 @@
 
 namespace Elyerr\ApiExtend\Console;
 
-use Illuminate\Console\Command; 
 use Elyerr\ApiExtend\Assets\Asset;
+use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process; 
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -34,6 +34,7 @@ class InstallCommand extends Command
         $this->addMiddleware();
         $this->addRoutes();
         $this->addEviromentKeys();
+        $this->broadcastinActivate();
 
         $this->info('API Extend library ha sido instalada');
 
@@ -45,7 +46,7 @@ class InstallCommand extends Command
 
         $sourcePathApp = __DIR__ . '/../../stubs/app';
         $targetPathApp = base_path('app');
-        
+
         $fileSystem->copyDirectory($sourcePathApp, $targetPathApp);
 
         $sourcePathStubs = __DIR__ . '/../../stubs/stubs';
@@ -201,8 +202,8 @@ class InstallCommand extends Command
         $index = 0;
         if ($readFile) {
             while (!feof($readFile)) {
-                $line = fgets($readFile);
                 $index += 1;
+                $line = fgets($readFile);
                 if (strpos($line, $after)) {
                     foreach ($middlewares as $middleware) {
                         $this->addString($file, $index, "\t\t{$middleware},\n");
@@ -227,18 +228,39 @@ class InstallCommand extends Command
             $index = 0;
             while (!feof($readFile)) {
                 $line = fgets($readFile);
-                $index += 1;                 
+                $index += 1;
                 if (strpos($line, 'BROADCAST_DRIVER') === 0) {
                     $this->addString(base_path('.env'), $index, "CHANNEL_NAME=''\n");
                     print("Variable de entorno {CHANNEL_NAME} agregada al archivo .env\n");
                 }
 
-                if (strpos($line, 'REDIS_PORT') === 0) {
+                if (strpos($line, 'REDIS_HOST') === 0) {
                     $this->addString(base_path('.env'), $index, "REDIS_PREFIX=''\n");
                     print("Variable de entorno {REDIS_PREFIX} agregada al archivo .env\n");
                 }
             }
             fclose($readFile);
+        }
+    }
+
+    /**
+     * activa el broadcast
+     */
+    protected function broadcastinActivate()
+    {
+        $file = base_path('config/app.php');
+        $readFile = fopen($file, 'r');
+
+        if ($readFile) {
+            $index = 0;
+            while (!feof($readFile)) {
+                $line = fgets($readFile);
+                if (strpos($line, 'App\Providers\BroadcastServiceProvider::class')) {
+                    $this->addString($file, $index, "\t\tApp\Providers\BroadcastServiceProvider::class,\n", 1);
+                    print("BroadCasting Activado");
+                }
+                $index += 1;
+            }
         }
     }
 
