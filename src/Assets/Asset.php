@@ -100,7 +100,7 @@ trait Asset
      * @param Boolean $repeat
      * @return void
      */
-    protected function addString($file, $index, $value, $repeat = false)
+    protected function addString($file, $index, $value, $replace = 0,  $repeat = false)
     {
         $readFile = fopen($file, 'r');
 
@@ -114,17 +114,16 @@ trait Asset
             }
             fclose($readFile);
         }
-
+         
         //comprovamos que el valor no exista
         if (!$repeat and strpos(file_get_contents($file), $value) === false) {
             //agregamo el nuevo valor al indice que queremos
-            array_splice($lines, $index, 0, $value);
+            array_splice($lines, $index, $replace, $value);
 
         } elseif ($repeat) { //si no son necesarios valores repetidos
             //agregamo el nuevo valor al indice que queremos
-            array_splice($lines, $index, 0, $value);
-        }
-
+            array_splice($lines, $index, $replace, $value);
+        } 
         //reemplazar los datos del archivo original
         //con los datos del array
         file_put_contents($file, $lines);
