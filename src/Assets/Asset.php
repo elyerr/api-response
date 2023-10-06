@@ -91,4 +91,42 @@ trait Asset
             return $index;
         }
     }
+
+    /**
+     * añade un nuevo texto en una nueva linea dentro del archivo
+     * @param String $file
+     * @param Int $index
+     * @param String $value
+     * @param Boolean $repeat
+     * @return void
+     */
+    protected function addString($file, $index, $value, $repeat = false)
+    {
+        $readFile = fopen($file, 'r');
+
+        $lines = [];
+
+        //leemos el archivo y creamos un array con esos datos por cada linea
+        if ($readFile) {
+            while (!feof($readFile)) {
+                $line = fgets($readFile);
+                array_push($lines, $line);
+            }
+            fclose($readFile);
+        }
+
+        //comprovamos que el valor no exista
+        if (!$repeat and strpos(file_get_contents($file), $value) === false) {
+            //agregamo el nuevo valor al indice que queremos
+            array_splice($lines, $index, 0, $value);
+
+        } elseif ($repeat) { //si no son necesarios valores repetidos
+            //agregamo el nuevo valor al indice que queremos
+            array_splice($lines, $index, 0, $value);
+        }
+
+        //reemplazar los datos del archivo original
+        //con los datos del array
+        file_put_contents($file, $lines);
+    }
 }
