@@ -29,7 +29,8 @@
         "illuminate/http": "^10.24",
         "illuminate/pagination": "^10.24",
         "illuminate/database": "^10.24",
-        "illuminate/routing": "^10.24"
+        "illuminate/routing": "^10.24",
+        "illuminate/broadcasting": "^10.26"
     },
     "minimum-stability": "dev",
     "prefer-stable": true    
