@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
-use App\Events\Tokens\LoginEvent;
-use App\Events\Tokens\LogoutEvent; 
+ 
 use Illuminate\Routing\Controller;
+use Elyerr\ApiExtend\Events\LoginEvent;
 use App\Http\Requests\Auth\LoginRequest;
+use Elyerr\ApiExtend\Events\LogoutEvent;
 use Elyerr\ApiExtend\Assets\JsonResponser;
 
 class AuthorizationController extends Controller

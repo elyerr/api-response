@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use Error;
 use Illuminate\Http\Request;
-use App\Exceptions\ReportError;
-use App\Events\Tokens\StoreTokenEvent;
-use App\Events\Tokens\DestroyTokenEvent;
-use App\Http\Controllers\GlobalController;
-use App\Events\Tokens\DestroyAllTokenEvent;
+use App\Exceptions\ReportError; 
+use App\Http\Controllers\GlobalController; 
+use Elyerr\ApiExtend\Events\StoreTokenEvent;
+use Elyerr\ApiExtend\Events\DestroyTokenEvent;
+use Elyerr\ApiExtend\Events\DestroyAllTokenEvent;
 
 class TokensController extends GlobalController
 {
