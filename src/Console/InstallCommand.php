@@ -34,6 +34,7 @@ class InstallCommand extends Command
         $this->addMiddleware();
         $this->addRoutes();
         $this->addEviromentKeys();
+        $this->registerSanctumClass();
         $this->broadcastinActivate();
         $this->broadcastingServiceProvider();
         $this->registerChannels();
@@ -188,6 +189,40 @@ class InstallCommand extends Command
                 file_put_contents(base_path($file), "\n{$route};", FILE_APPEND);
             }
         }
+    }
+
+    /**
+     * registra la clase personalizada de sanctum en AppServiceProvider
+     */
+    protected function registerSanctumClass()
+    {
+        $imports = ["Laravel\Sanctum\Sanctum","App\Models\Sanctum\PersonalAccessToken"];
+        $register = "Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class)";
+        $appServiceProvider = base_path('app/Providers/AppServiceProvider.php');
+        $readFile = fopen($appServiceProvider, 'r');
+
+        if ($readFile) {
+            $index = 0;
+            while (!feof($readFile)) {
+                $line = fgets($readFile);
+                if (strpos($line, "Illuminate")) {
+                    $index += 1;
+                    foreach ($imports as $import) {
+                        $this->addString($appServiceProvider, ($index), "use {$import};\n");
+                    }
+                }
+
+                if (strpos($line, "function boot()")) {
+                    $index += 1;
+                    $this->addString($appServiceProvider, ($index + 2), "\t\t\t{$register};\n", 1);
+                }
+                $index += 1;
+            }
+            fclose($readFile);
+        }
+
+        echo "PersonalAccessToken registrado\n";
+
     }
 
     /**
