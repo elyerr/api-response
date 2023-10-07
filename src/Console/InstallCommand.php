@@ -35,6 +35,8 @@ class InstallCommand extends Command
         $this->addRoutes();
         $this->addEviromentKeys();
         $this->broadcastinActivate();
+        $this->broadcastingServiceProvider();
+        $this->registerChannels();
 
         $this->info('API Extend library ha sido instalada');
 
@@ -229,14 +231,16 @@ class InstallCommand extends Command
             while (!feof($readFile)) {
                 $line = fgets($readFile);
                 $index += 1;
-                if (strpos($line, 'BROADCAST_DRIVER') === 0) {
-                    $this->addString(base_path('.env'), $index, "CHANNEL_NAME=''\n");
-                    print("Variable de entorno {CHANNEL_NAME} agregada al archivo .env\n");
+                if (strpos($line, 'ROADCAST_DRIVER') &&
+                    strpos(file_get_contents(base_path('.env')), "HANNEL_NAME") === false) {
+                    $this->addString(base_path('.env'), $index, "CHANNEL_NAME='kumal'\n");
+                    echo "Variable de entorno {CHANNEL_NAME} agregada al archivo .env\n";
                 }
 
-                if (strpos($line, 'REDIS_HOST') === 0) {
+                if (strpos($line, 'EDIS_HOST') &&
+                    strpos(file_get_contents(base_path('.env')), "EDIS_PREFIX=") === false) {
                     $this->addString(base_path('.env'), $index, "REDIS_PREFIX=''\n");
-                    print("Variable de entorno {REDIS_PREFIX} agregada al archivo .env\n");
+                    echo "Variable de entorno {REDIS_PREFIX} agregada al archivo .env\n";
                 }
             }
             fclose($readFile);
@@ -257,11 +261,54 @@ class InstallCommand extends Command
                 $line = fgets($readFile);
                 if (strpos($line, 'App\Providers\BroadcastServiceProvider::class')) {
                     $this->addString($file, $index, "\t\tApp\Providers\BroadcastServiceProvider::class,\n", 1);
-                    print("BroadCasting Activado");
+                    print("BroadCasting Activado\n");
                 }
                 $index += 1;
             }
         }
     }
 
+    /**
+     * agrega los midleware a la rutas
+     */
+    protected function broadcastingServiceProvider()
+    {
+        $provider = base_path('app/Providers/BroadcastServiceProvider.php');
+        $readProvider = fopen($provider, 'r');
+
+        if ($readProvider) {
+            $index = 0;
+            while (!feof($readProvider)) {
+                $line = fgets($readProvider);
+                if (strpos($line, '::routes')) {
+                    $this->addString(
+                        $provider,
+                        $index,
+                        "\t\tBroadcast::routes(['middleware' => ['auth.broadcast', 'web']]);\n",
+                        1
+                    );
+                    break;
+                }
+                $index += 1;
+            }
+            fclose($readProvider);
+        }
+    }
+
+    /**
+     * registra los canales y el provider
+     */
+    protected function registerChannels()
+    {
+        $channel = base_path('routes/channels.php');
+        $readChannel = fopen($channel, 'r');
+
+        $routes = 'Broadcast::channel(env("CHANNEL_NAME") . ".{id}", function ($user, $id) {' . "\n\t" . 'return (int) $user->id === (int) $id;' . "\n});\n\n";
+        $routes .= 'Broadcast::channel(env("CHANNEL_NAME"), function ($user) {' . "\n\t" . 'return (int) $user->id === (int) request()->user()->id; ' . "\n});";
+
+        if ($readChannel) {
+            $this->addString($channel, 15, $routes, 3);
+            echo "Los canales han sido registrados\n";
+        }
+    }
 }
