@@ -1,4 +1,4 @@
-## Cambios realizados main 
+## Cambios realizados v1.0.3 2023/10/07 
 - agregando registro de los middleware dentro de providers automaticamente
 - registrando canales en `routes/api.php` automaticamente
 - agregando nombre al canal en el archivo `.env`
