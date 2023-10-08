@@ -1,3 +1,10 @@
+## Cambios realizados v1.0.4 2023/10/07
+- Solucionando conflictos con librerias existentes en el framework de laravel
+- Agregando librerias al entorno en desarrollo
+- Actualizando GlobalController en  `stubs\app\Http\Controllers`
+- agregando pruebas unitarias a Asset Trait
+- cambiando a publica la funcion `addString` en el trait Asset
+
 ## Cambios realizados v1.0.3 2023/10/07 
 - agregando registro de los middleware dentro de providers automaticamente
 - registrando canales en `routes/api.php` automaticamente
