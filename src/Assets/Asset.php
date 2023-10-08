@@ -100,7 +100,7 @@ trait Asset
      * @param Boolean $repeat
      * @return void
      */
-    protected function addString($file, $index, $value, $replace = 0,  $repeat = false)
+    public function addString($file, $index, $value, $replace = 0,  $repeat = false)
     {
         $readFile = fopen($file, 'r');
 
