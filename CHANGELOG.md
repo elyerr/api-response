@@ -4,6 +4,7 @@
 - Actualizando GlobalController en  `stubs\app\Http\Controllers`
 - agregando pruebas unitarias a Asset Trait
 - cambiando a publica la funcion `addString` en el trait Asset
+- Agregando `Timestamps, HasFactory` en Master Model.
 
 ## Cambios realizados v1.0.3 2023/10/07 
 - agregando registro de los middleware dentro de providers automaticamente
