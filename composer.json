@@ -21,18 +21,18 @@
             "email": "yerel9212@yahoo.es"
         }
     ],
-    "require": {
-        "php": "^8.0.2",
-        "illuminate/support": "^10.24",
-        "illuminate/filesystem": "^10.24",
-        "illuminate/console": "^10.24",
-        "illuminate/http": "^10.24",
-        "illuminate/pagination": "^10.24",
-        "illuminate/database": "^10.24",
-        "illuminate/routing": "^10.24",
-        "illuminate/broadcasting": "^10.26",
-        "laravel-zero/foundation": "^10.26"
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true    
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require-dev": {
+        "php": "^8.0.2",
+        "laravel/framework": "^9.0",
+        "laravel/sanctum": "^3.3",
+        "spatie/laravel-fractal": "^6.0",
+        "phpunit/phpunit": "^10.4"
+    }
 }
