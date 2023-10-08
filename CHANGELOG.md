@@ -4,6 +4,7 @@
 - agregando nombre al canal en el archivo `.env`
 - corrigiendo duplicidad de variables en el archivo `.env`
 - registrando `PersonalAccessToken` en `AppServiceProvider`
+- eliminando `ReportError` de los `stubs`
 
 ## Cambios realizados v1.0.2 2023/10/06
 - registrando Middleware `auth.broadcast`y`transform.request` de forma automatica en el `kernel.php`
