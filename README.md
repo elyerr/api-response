@@ -11,10 +11,14 @@ composer require elyerr/api-extend
 composer require elyerr/api-extend dev-main
 ```
 
-## Agregar Controladores
+## Installar lo necesario
 ```
 php artisan api-extend:install
 ```
 
+## Instalar controladores de authenticacion
+```
+php artisan api-extend:auth
+```
 
 ## [Ver Documentacion](https://gitlab.com/elyerr/api-extend/-/wikis/home)
