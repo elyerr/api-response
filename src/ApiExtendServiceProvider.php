@@ -1,9 +1,9 @@
 <?php
 
 namespace Elyerr\ApiExtend;
- 
+
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider as Provider;
-use Illuminate\Contracts\Support\DeferrableProvider; 
 
 final class ApiExtendServiceProvider extends Provider implements DeferrableProvider
 {
@@ -16,7 +16,8 @@ final class ApiExtendServiceProvider extends Provider implements DeferrableProvi
     {
         $this->commands([
             Console\InstallCommand::class,
-        ]);       
+            Console\RegisterRoutesCommand::class, 
+        ]);
     }
 
     /**
@@ -36,7 +37,10 @@ final class ApiExtendServiceProvider extends Provider implements DeferrableProvi
      */
     public function provides()
     {
-        return [Console\InstallCommand::class];
+        return [
+            Console\InstallCommand::class,
+            Console\RegisterRoutesCommand::class, 
+        ];
     }
- 
+
 }
