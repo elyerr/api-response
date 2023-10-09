@@ -1,3 +1,13 @@
+## Cambios realizados main
+- restructurando Command Class
+- creando un trait `Console` en Assets para funciones globales.
+- Agregando nueva clase Command `RegisterRoutesCommand` 
+- Agregando nueva clase Command `RegisterRoutesCommand` 
+- correccion de sobrescribir controlador si existe
+- correccion de sobrescribir Master y Auth model si existen
+- Comando Modificado `api-extend:install` Instala los necesario para desarrollar una api
+- nuevo comando `api-extend:auth` instala solo controladores de authenticacion
+
 ## Cambios realizados v1.0.4 2023/10/07
 - Solucionando conflictos con librerias existentes en el framework de laravel
 - Agregando librerias al entorno en desarrollo
