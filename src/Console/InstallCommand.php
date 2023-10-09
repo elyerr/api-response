@@ -3,13 +3,13 @@
 namespace Elyerr\ApiExtend\Console;
 
 use Elyerr\ApiExtend\Assets\Asset;
+use Elyerr\ApiExtend\Assets\Console;
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
-    use Asset;
+    use Asset, Console;
 
     protected $signature = 'api-extend:install';
 
@@ -18,7 +18,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Extencion extra para trabajar con una API bajo Laravel';
+    protected $description = 'Registra dependencias como middleware,broadcasting,KeyEviroment,Models';
 
     /**
      * Execute the console command.
@@ -31,8 +31,9 @@ class InstallCommand extends Command
         $this->requireComposerPackages(['laravel/sanctum', 'spatie/laravel-fractal']);
 
         $this->installStubs();
+        $this->models();
+        $this->registerController();
         $this->addMiddleware();
-        $this->addRoutes();
         $this->addEviromentKeys();
         $this->registerSanctumClass();
         $this->broadcastinActivate();
@@ -43,36 +44,38 @@ class InstallCommand extends Command
 
     }
 
+    /**
+     * generacion de clases,eventos, controladores personalidas
+     * @return void
+     */
     public function installStubs()
     {
-        $fileSystem = new Filesystem();
-
-        $sourcePathApp = __DIR__ . '/../../stubs/app';
-        $targetPathApp = base_path('app');
-
-        $fileSystem->copyDirectory($sourcePathApp, $targetPathApp);
-
         $sourcePathStubs = __DIR__ . '/../../stubs/stubs';
         $targetPathStubs = base_path('stubs');
-        $fileSystem->copyDirectory($sourcePathStubs, $targetPathStubs);
-
+        $this->fileSystem()->copyDirectory($sourcePathStubs, $targetPathStubs);
     }
 
-    public function addRoutes()
+    public function models()
     {
-        $this->registerRoutes([
-            "Route::post('login', [AuthorizationController::class, 'store'])",
-            "Route::post('logout', [AuthorizationController::class, 'destroy'])",
-            "Route::delete('tokens', [TokensController::class, 'destroyAllTokens'])",
-            "Route::resource('tokens', TokensController::class)->only('index', 'store', 'destroy')",
-        ],
-            'routes/api.php',
-            [
-                "App\Http\Controllers\Auth\AuthorizationController",
-                "App\Http\Controllers\Auth\TokensController",
-            ]);
+
+        $master = 'app/Models/Master.php';
+        $auth = 'app/Models/Auth.php';
+        $source = __DIR__ . '/../../stubs/';
+
+        if (!file_exists(base_path($master))) {
+            copy($source . $master, base_path($master));
+        }
+
+        if (!file_exists(base_path($auth))) {
+            copy($source . $auth, base_path($auth));
+        }
+
     }
 
+    /**
+     * agrega middlware al kernerl en laravel
+     * @return void
+     */
     public function addMiddleware()
     {
         $this->registerMiddleware([
@@ -166,37 +169,11 @@ class InstallCommand extends Command
     }
 
     /**
-     * Añade rutas
-     *
-     * @param Array  $routes
-     * @param String $file
-     * @param Array $imports
-     * @return void
-     */
-    protected function registerRoutes(array $routes, $file, array $imports)
-    {
-        foreach ($imports as $import) {
-            $this->addString(base_path($file), 3, "use {$import};\n");
-        }
-
-        // Lee el contenido actual del archivo
-        $currentContent = file_get_contents(base_path($file));
-
-        foreach ($routes as $route) {
-            // Verifica si la ruta ya existe en el archivo
-            if (strpos($currentContent, $route) === false) {
-                // La ruta no existe, agrégala al archivo
-                file_put_contents(base_path($file), "\n{$route};", FILE_APPEND);
-            }
-        }
-    }
-
-    /**
      * registra la clase personalizada de sanctum en AppServiceProvider
      */
     protected function registerSanctumClass()
     {
-        $imports = ["Laravel\Sanctum\Sanctum","App\Models\Sanctum\PersonalAccessToken"];
+        $imports = ["Laravel\Sanctum\Sanctum", "App\Models\Sanctum\PersonalAccessToken"];
         $register = "Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class)";
         $appServiceProvider = base_path('app/Providers/AppServiceProvider.php');
         $readFile = fopen($appServiceProvider, 'r');
