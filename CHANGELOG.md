@@ -12,6 +12,8 @@
 - Modificando metodo `userID` en el Middlware `AuthenticateBroadcast` para que devuelva un objetoo
 - Corrigiendo `user_can_join` en el Middlware `AuthenticateBroadcast`  para que permita authenticacion de multiples clases.
 - Agregando nueva funcion en el trait **Asset** para generar una contraseña aleatoria
+- agregando nueva funcion para contar dimesiones de arrays en el trait **Asset**
+- corrigiendo condicional del middleware `TransformRequest`
 
 ## Cambios realizados v1.0.4 2023/10/07
 - Solucionando conflictos con librerias existentes en el framework de laravel
