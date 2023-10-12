@@ -7,6 +7,8 @@
 - correccion de sobrescribir Master y Auth model si existen
 - Comando Modificado `api-extend:install` Instala los necesario para desarrollar una api
 - nuevo comando `api-extend:auth` instala solo controladores de authenticacion
+- Agregando nueva funcion `fileToArray` en el trait Asset
+- creando nuevo metodo `registerPersonalAccessTokenFunction` para agregar nueva funcion `registerPersonalAccessTokenFunction` en el modelo **Auth**
 
 ## Cambios realizados v1.0.4 2023/10/07
 - Solucionando conflictos con librerias existentes en el framework de laravel
