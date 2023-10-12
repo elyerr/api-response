@@ -39,6 +39,7 @@ class InstallCommand extends Command
         $this->broadcastinActivate();
         $this->broadcastingServiceProvider();
         $this->registerChannels();
+        $this->registerPersonalAccessTokenFunction();
 
         $this->info('API Extend library ha sido instalada');
 
@@ -321,6 +322,39 @@ class InstallCommand extends Command
         if ($readChannel) {
             $this->addString($channel, 15, $routes, 3);
             echo "Los canales han sido registrados\n";
+        }
+    }
+
+    /**
+     * agrega la funcion en el model Auth
+     */
+    public function registerPersonalAccessTokenFunction()
+    {
+        $file = base_path('app/Models/Auth.php');
+        $readFile = fopen($file, 'r');
+        $function = "\n\t" . 'public static function PersonalAccessToken($token)' . "\n\t{\n\t\t" . 'return PersonalAccessToken::findToken($token);' . "\n\t}\n";
+        $imports = "App\Models\Sanctum\PersonalAccessToken";
+
+        //agregando imports
+        if ($readFile) {
+            $count = 0;
+            while (!feof($readFile)) {
+                $line = fgets($readFile);
+                if (strpos($line, "ResetPassword")) {
+                    $this->addString($file, $count, "use $imports;\n");
+                }
+                $count += 1;
+            }
+        }
+        //agregando funcion
+        $index = -1;
+        if (strpos(file_get_contents($file), 'PersonalAccessToken($token)') === false) {
+            foreach (array_reverse($this->fileToArray($file)) as $value) {
+                if (str_contains($value, "}")) {
+                    $this->addString($file, $index, $function);
+                }
+                $index -= 1;
+            }
         }
     }
 }
