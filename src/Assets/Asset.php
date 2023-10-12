@@ -9,6 +9,32 @@ use ErrorException;
  */
 trait Asset
 {
+
+    /**
+     * Set the temporal password.
+     *
+     * @param  paramType  $value
+     * @return void
+     */
+    public function passwordTempGenerate($len = 15)
+    {
+
+        $string =  str_split("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789*#!");
+
+        //nueva cadena a generar
+
+        $password = null;
+
+        //cantidad de letras a tomar del abc y generear unnuevo string
+
+        for ($i = 0; $i < $len; $i++) {
+
+            $password .= $string[random_int(0, count($string) - 1)];
+
+        }
+        return $password;
+    }
+
     /**
      * genera un codigo unico
      * @param String $id
@@ -102,8 +128,8 @@ trait Asset
      */
     public function addString($file, $index, $value, $replace = 0, $repeat = false)
     {
-        $lines =  $this->fileToArray($file);
-        
+        $lines = $this->fileToArray($file);
+
         //comprovamos que el valor no exista
         if (!$repeat and strpos(file_get_contents($file), $value) === false) {
             //agregamo el nuevo valor al indice que queremos
