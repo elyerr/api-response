@@ -4,10 +4,12 @@ namespace Elyerr\ApiExtend\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Elyerr\ApiExtend\Assets\Asset;
 use Illuminate\Validation\ValidationException;
 
 class TransformRequest
 {
+    use Asset;
     /**
      * Handle an incoming request.
      *
@@ -23,8 +25,8 @@ class TransformRequest
 
         foreach ($request->request->all() as $input => $value) {
 
-            //evaluamos si es un array
-            if (is_array($value)) {
+            //evaluamos si es un array y que sea de segunda dimencion
+            if (is_array($value) and $this->array_count_dimension($value) == 2) {
                 //neeva variable
                 $$input = [];
 
