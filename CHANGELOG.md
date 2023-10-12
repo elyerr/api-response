@@ -1,4 +1,4 @@
-## Cambios realizados v1.0.5 2023/10/07
+## Cambios realizados v1.0.5 2023/10/12
 - restructurando Command Class
 - creando un trait `Console` en Assets para funciones globales.
 - Agregando nueva clase Command `RegisterRoutesCommand` 
