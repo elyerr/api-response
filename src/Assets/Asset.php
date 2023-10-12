@@ -165,4 +165,29 @@ trait Asset
 
         return $lines;
     }
+
+    /**
+     * cuenta cuantas dimensiones tiene un array, devolviendo un valor numerico 
+     * correspondiente a la dimension, si no es un array devolvera 0
+     * @param Array $array
+     * @param Int
+     */
+    public function array_count_dimension($array)
+    {   
+        $dimension = 0;
+        //funcion anonima
+        $count_dimension = function ($array) use (&$dimension, &$count_dimension) {
+            if (is_array($array)) {
+                $dimension += 1;
+                foreach ($array as $value) {
+                    return $count_dimension($value);
+                    break;
+                }
+            }
+        };
+        //ejecucion
+        $count_dimension($array);
+
+        return $dimension;
+    }
 }
