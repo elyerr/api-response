@@ -9,6 +9,8 @@
 - nuevo comando `api-extend:auth` instala solo controladores de authenticacion
 - Agregando nueva funcion `fileToArray` en el trait Asset
 - creando nuevo metodo `registerPersonalAccessTokenFunction` para agregar nueva funcion `registerPersonalAccessTokenFunction` en el modelo **Auth**
+- Modificando metodo `userID` en el Middlware `AuthenticateBroadcast` para que devuelva un objetoo
+- Corrigiendo `user_can_join` en el Middlware `AuthenticateBroadcast`  para que permita authenticacion de multiples clases.
 
 ## Cambios realizados v1.0.4 2023/10/07
 - Solucionando conflictos con librerias existentes en el framework de laravel
