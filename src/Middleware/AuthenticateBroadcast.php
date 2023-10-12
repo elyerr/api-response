@@ -3,8 +3,8 @@
 namespace Elyerr\ApiExtend\Middleware;
 
 use Closure;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;   
+use Illuminate\Support\Facades\Auth;
+use App\Models\Auth as Authenticable;
 
 class AuthenticateBroadcast
 {
@@ -35,19 +35,26 @@ class AuthenticateBroadcast
      */
     public function userID($token)
     {
-        $personalToken = User::PersonalAccessToken($token);
+        $personalToken = Authenticable::PersonalAccessToken($token);
 
-        return $personalToken ? $personalToken->tokenable_id : null;
+        return $personalToken;
+
     }
 
     /**
-     * verifica que el usuario se autentique
+     * verifica que el usuario se encuentre en el sistema y se autentique
      * @param String $token
+     * @return Boolean
      */
     public function user_can_join($token)
     {
-        if ($token) {
-            $user = User::where('id', $this->userID($token))->first();
+        $sanctum = $this->userID($token);
+
+        if ($sanctum) {
+            $className = $sanctum->tokenable_type;
+            $authenticableId = $sanctum->tokenable_id;
+
+            $user = (new $className())->find($authenticableId);
 
             if ($user) {
                 Auth::login($user);
