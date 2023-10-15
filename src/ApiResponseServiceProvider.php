@@ -5,7 +5,7 @@ namespace Elyerr\ApiResponse;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider as Provider;
 
-final class ApiExtendServiceProvider extends Provider implements DeferrableProvider
+final class ApiResponseServiceProvider extends Provider implements DeferrableProvider
 {
     /**
      * Bootstrap the application services.
