@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use Error;
-use Illuminate\Http\Request;
-use App\Exceptions\ReportError; 
-use App\Http\Controllers\GlobalController; 
-use Elyerr\ApiExtend\Events\StoreTokenEvent;
-use Elyerr\ApiExtend\Events\DestroyTokenEvent;
-use Elyerr\ApiExtend\Events\DestroyAllTokenEvent;
+use Illuminate\Http\Request; 
+use App\Http\Controllers\GlobalController;  
+use Elyerr\ApiResponse\Events\StoreTokenEvent;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Elyerr\ApiResponse\Events\DestroyTokenEvent;
+use Elyerr\ApiResponse\Events\DestroyAllTokenEvent;
 
 class TokensController extends GlobalController
 {
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth');
     }
 
     /**
@@ -39,7 +39,7 @@ class TokensController extends GlobalController
      */
     public function store(Request $request)
     {
-        $token = $request->user()->createToken($request->user()->email . "|" . $_SERVER['HTTP_USER_AGENT']);
+        $token = $request->user()->createToken($_SERVER['HTTP_USER_AGENT']);
 
         StoreTokenEvent::dispatch(request()->user());
 

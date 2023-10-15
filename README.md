@@ -1,24 +1,23 @@
-## Api-Extend
-Extensión para API bajo el framework de Laravel. Esta extensión funciona usando **Sanctum** 
+## api-response
+Extensión para APIs bajo el framework de Laravel, incluye funciones que permite filtar, buscar,ordenar, paginar datos devolviendo en formato json
 
 ## Instalar version stable
 ```
-composer require elyerr/api-extend
+composer require elyerr/api-response
 ```
 
 ## Instalar version en desarrollo
 ```
-composer require elyerr/api-extend dev-main
+composer require elyerr/api-response dev-main
 ```
 
 ## Installar lo necesario
 ```
-php artisan api-extend:install
+php artisan api-response:install
 ```
 
 ## Instalar controladores de authenticacion
 ```
-php artisan api-extend:auth
+php artisan api-response:auth
 ```
-
-## [Ver Documentacion](https://gitlab.com/elyerr/api-extend/-/wikis/home)
+ 

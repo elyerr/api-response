@@ -1,10 +1,10 @@
 <?php
 
-namespace Elyerr\ApiExtend\Middleware;
+namespace Elyerr\ApiResponse\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Elyerr\ApiExtend\Assets\Asset;
+use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Validation\ValidationException;
 
 class TransformRequest

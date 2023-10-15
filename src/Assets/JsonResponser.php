@@ -1,12 +1,12 @@
 <?php
 
-namespace Elyerr\ApiExtend\Assets;
+namespace Elyerr\ApiResponse\Assets;
 
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 trait JsonResponser
 {

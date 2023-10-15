@@ -1,9 +1,9 @@
 <?php
 
-namespace Elyerr\ApiExtend\Exceptions;
+namespace Elyerr\ApiResponse\Exceptions;
 
 use Exception; 
-use Elyerr\ApiExtend\Assets\JsonResponser;
+use Elyerr\ApiResponse\Assets\JsonResponser;
 
 class ReportError extends Exception
 {

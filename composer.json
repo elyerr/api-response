@@ -1,18 +1,18 @@
 {
-    "name": "elyerr/api-extend",
-    "description": "Proporciona funcionalidad extra a API bajo el framework Laravel",
+    "name": "elyerr/api-response",
+    "description": "Proporciona funcionalidad extra a una API bajo el framework Laravel",
     "type": "library",
     "license": "AGPL-3.0-only",
     "extra": {
         "laravel": {
             "providers": [
-                "Elyerr\\ApiExtend\\ApiExtendServiceProvider"
+                "Elyerr\\ApiResponse\\ServiceProvider"
             ]
         }
     },
     "autoload": {
         "psr-4": {
-            "Elyerr\\ApiExtend\\": "src/"
+            "Elyerr\\ApiResponse\\": "src/"
         }
     },
     "authors": [
@@ -30,8 +30,7 @@
     "prefer-stable": true,
     "require-dev": {
         "php": "^8.0.2",
-        "laravel/framework": "^9.0",
-        "laravel/sanctum": "^3.3",
+        "laravel/framework": "^9.0", 
         "spatie/laravel-fractal": "^6.0",
         "phpunit/phpunit": "^10.4"
     }

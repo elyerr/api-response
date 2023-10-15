@@ -1,6 +1,6 @@
 <?php
 
-namespace Elyerr\ApiExtend\Assets;
+namespace Elyerr\ApiResponse\Assets;
 
 use DateTimeInterface;
 

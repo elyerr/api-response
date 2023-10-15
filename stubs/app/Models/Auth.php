@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Elyerr\ApiExtend\Assets\Asset;
-use Laravel\Sanctum\HasApiTokens;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;  
+use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -13,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {  
-    use HasApiTokens, HasUuids, HasFactory, Notifiable, Asset;
+    use HasUuids, HasFactory, Notifiable, Asset;
 
         /**
      * The data type of the auto-incrementing ID.

@@ -2,7 +2,7 @@
 
 namespace Test\Assets;
 
-use Elyerr\ApiExtend\Assets\Asset;
+use Elyerr\ApiResponse\Assets\Asset;
 use PHPUnit\Framework\TestCase;
 
 class AssetTest extends TestCase

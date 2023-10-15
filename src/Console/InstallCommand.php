@@ -1,10 +1,10 @@
 <?php
 
-namespace Elyerr\ApiExtend\Console;
+namespace Elyerr\ApiResponse\Console;
 
-use Elyerr\ApiExtend\Assets\Asset;
-use Elyerr\ApiExtend\Assets\Console;
 use Illuminate\Console\Command;
+use Elyerr\ApiResponse\Assets\Asset;
+use Elyerr\ApiResponse\Assets\Console;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
@@ -28,18 +28,15 @@ class InstallCommand extends Command
     public function handle()
     {
 
-        $this->requireComposerPackages(['laravel/sanctum', 'spatie/laravel-fractal']);
+        $this->requireComposerPackages(['spatie/laravel-fractal']);
 
         $this->installStubs();
         $this->models();
         $this->registerController();
         $this->addMiddleware();
-        $this->addEviromentKeys();
-        $this->registerSanctumClass();
-        $this->broadcastinActivate();
-        $this->broadcastingServiceProvider();
-        $this->registerChannels();
-        $this->registerPersonalAccessTokenFunction();
+        $this->addEviromentKeys(); 
+        $this->broadcastinActivate(); 
+        $this->registerChannels(); 
 
         $this->info('API Extend library ha sido instalada');
 
@@ -80,8 +77,8 @@ class InstallCommand extends Command
     public function addMiddleware()
     {
         $this->registerMiddleware([
-            "'auth.broadcast' => \Elyerr\ApiExtend\Middleware\AuthenticateBroadcast::class",
-            "'transform.request' => \Elyerr\ApiExtend\Middleware\TransformRequest::class",
+            "'auth.broadcast' => \Elyerr\ApiResponse\Middleware\AuthenticateBroadcast::class",
+            "'transform.request' => \Elyerr\ApiResponse\Middleware\TransformRequest::class",
         ], 'verified');
 
     }
@@ -168,40 +165,7 @@ class InstallCommand extends Command
             }
         }
     }
-
-    /**
-     * registra la clase personalizada de sanctum en AppServiceProvider
-     */
-    protected function registerSanctumClass()
-    {
-        $imports = ["Laravel\Sanctum\Sanctum", "App\Models\Sanctum\PersonalAccessToken"];
-        $register = "Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class)";
-        $appServiceProvider = base_path('app/Providers/AppServiceProvider.php');
-        $readFile = fopen($appServiceProvider, 'r');
-
-        if ($readFile) {
-            $index = 0;
-            while (!feof($readFile)) {
-                $line = fgets($readFile);
-                if (strpos($line, "Illuminate")) {
-                    $index += 1;
-                    foreach ($imports as $import) {
-                        $this->addString($appServiceProvider, ($index), "use {$import};\n");
-                    }
-                }
-
-                if (strpos($line, "function boot()")) {
-                    $index += 1;
-                    $this->addString($appServiceProvider, ($index + 2), "\t\t\t{$register};\n", 1);
-                }
-                $index += 1;
-            }
-            fclose($readFile);
-        }
-
-        echo "PersonalAccessToken registrado\n";
-
-    }
+ 
 
     /**
      * agrega los middleware al kernel
@@ -282,33 +246,6 @@ class InstallCommand extends Command
     }
 
     /**
-     * agrega los midleware a la rutas
-     */
-    protected function broadcastingServiceProvider()
-    {
-        $provider = base_path('app/Providers/BroadcastServiceProvider.php');
-        $readProvider = fopen($provider, 'r');
-
-        if ($readProvider) {
-            $index = 0;
-            while (!feof($readProvider)) {
-                $line = fgets($readProvider);
-                if (strpos($line, '::routes')) {
-                    $this->addString(
-                        $provider,
-                        $index,
-                        "\t\tBroadcast::routes(['middleware' => ['auth.broadcast', 'web']]);\n",
-                        1
-                    );
-                    break;
-                }
-                $index += 1;
-            }
-            fclose($readProvider);
-        }
-    }
-
-    /**
      * registra los canales y el provider
      */
     protected function registerChannels()
@@ -324,37 +261,5 @@ class InstallCommand extends Command
             echo "Los canales han sido registrados\n";
         }
     }
-
-    /**
-     * agrega la funcion en el model Auth
-     */
-    public function registerPersonalAccessTokenFunction()
-    {
-        $file = base_path('app/Models/Auth.php');
-        $readFile = fopen($file, 'r');
-        $function = "\n\t" . 'public static function PersonalAccessToken($token)' . "\n\t{\n\t\t" . 'return PersonalAccessToken::findToken($token);' . "\n\t}\n";
-        $imports = "App\Models\Sanctum\PersonalAccessToken";
-
-        //agregando imports
-        if ($readFile) {
-            $count = 0;
-            while (!feof($readFile)) {
-                $line = fgets($readFile);
-                if (strpos($line, "ResetPassword")) {
-                    $this->addString($file, $count, "use $imports;\n");
-                }
-                $count += 1;
-            }
-        }
-        //agregando funcion
-        $index = -1;
-        if (strpos(file_get_contents($file), 'PersonalAccessToken($token)') === false) {
-            foreach (array_reverse($this->fileToArray($file)) as $value) {
-                if (str_contains($value, "}")) {
-                    $this->addString($file, $index, $function);
-                }
-                $index -= 1;
-            }
-        }
-    }
+ 
 }

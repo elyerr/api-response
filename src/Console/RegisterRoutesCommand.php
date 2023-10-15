@@ -1,10 +1,10 @@
 <?php
 
-namespace Elyerr\ApiExtend\Console;
+namespace Elyerr\ApiResponse\Console;
 
-use Elyerr\ApiExtend\Assets\Asset;
-use Elyerr\ApiExtend\Assets\Console;
 use Illuminate\Console\Command;
+use Elyerr\ApiResponse\Assets\Asset;
+use Elyerr\ApiResponse\Assets\Console;
 
 final class RegisterRoutesCommand extends Command
 {

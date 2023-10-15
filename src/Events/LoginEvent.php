@@ -1,6 +1,6 @@
 <?php
 
-namespace Elyerr\ApiExtend\Events;
+namespace Elyerr\ApiResponse\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;

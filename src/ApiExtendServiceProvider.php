@@ -1,6 +1,6 @@
 <?php
 
-namespace Elyerr\ApiExtend;
+namespace Elyerr\ApiResponse;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider as Provider;

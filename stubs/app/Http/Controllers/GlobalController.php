@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Elyerr\ApiExtend\Assets\Asset;
-use Elyerr\ApiExtend\Assets\JsonResponser;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+  
+use Illuminate\Routing\Controller;
+use Elyerr\ApiResponse\Assets\Asset;
+use Elyerr\ApiResponse\Assets\JsonResponser;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GlobalController extends Controller
 {
@@ -15,7 +15,7 @@ class GlobalController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth');
     }
 
     public function AuthKey()
