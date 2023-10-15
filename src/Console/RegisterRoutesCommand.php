@@ -10,7 +10,7 @@ final class RegisterRoutesCommand extends Command
 {
     use Asset, Console;
 
-    protected $signature = "api-extend:auth";
+    protected $signature = "api-response:auth";
 
     protected $description = "Registra los controladores para auth y tokens";
 

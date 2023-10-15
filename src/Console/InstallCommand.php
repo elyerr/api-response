@@ -11,7 +11,7 @@ class InstallCommand extends Command
 {
     use Asset, Console;
 
-    protected $signature = 'api-extend:install';
+    protected $signature = 'api-response:install';
 
     /**
      * The console command description.
