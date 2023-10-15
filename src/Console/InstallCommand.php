@@ -76,8 +76,7 @@ class InstallCommand extends Command
      */
     public function addMiddleware()
     {
-        $this->registerMiddleware([
-            "'auth.broadcast' => \Elyerr\ApiResponse\Middleware\AuthenticateBroadcast::class",
+        $this->registerMiddleware([ 
             "'transform.request' => \Elyerr\ApiResponse\Middleware\TransformRequest::class",
         ], 'verified');
 
@@ -112,8 +111,7 @@ class InstallCommand extends Command
 
         if ($process->isSuccessful()) {
             echo "Publicando configuraciones\n";
-            $this->publishAssets([
-                '"Laravel\Sanctum\SanctumServiceProvider"',
+            $this->publishAssets([ 
                 '"Spatie\Fractal\FractalServiceProvider"',
             ]);
 
