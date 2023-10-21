@@ -28,13 +28,10 @@ final class RegisterRoutesCommand extends Command
         $this->addRoutes([
             "Route::post('login', [AuthorizationController::class, 'store'])",
             "Route::post('logout', [AuthorizationController::class, 'destroy'])",
-            "Route::delete('tokens', [TokensController::class, 'destroyAllTokens'])",
-            "Route::resource('tokens', TokensController::class)->only('index', 'store', 'destroy')",
         ],
             'routes/api.php',
             [
                 "App\Http\Controllers\Auth\AuthorizationController",
-                "App\Http\Controllers\Auth\TokensController",
             ]);
     }
 
@@ -54,12 +51,7 @@ final class RegisterRoutesCommand extends Command
             );
         }
 
-        if (!file_exists(base_path("$targetPathAuth/TokensController.php"))) {
-            copy(
-                "$sourcePathAuth/TokensController.php",
-                base_path("$targetPathAuth/TokensController.php")
-            );
-        }
+        
 
     }
 
