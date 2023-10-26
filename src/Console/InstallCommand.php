@@ -28,7 +28,7 @@ class InstallCommand extends Command
     public function handle()
     {
 
-        $this->requireComposerPackages(['spatie/laravel-fractal']);
+        //$this->requireComposerPackages(['spatie/laravel-fractal']);
 
         $this->installStubs();
         $this->models();

@@ -28,10 +28,12 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "require": {
+        "spatie/laravel-fractal": "^6.0"
+    },
     "require-dev": {
         "php": "^8.0.2",
-        "laravel/framework": "^9.0", 
-        "spatie/laravel-fractal": "^6.0",
+        "laravel/framework": "^9.0",
         "phpunit/phpunit": "^10.4"
     }
 }
