@@ -264,7 +264,7 @@ este trait puede ser impementado en un modelo para que no use transformaderes pa
     ```
 
 ## Uso de los Transformadores
-para crear un transformador debe usarse el comando `php artisan make:middleware UserTransformer`, puedes revisar la [documentacion oficial](https://github.com/spatie/laravel-fractal).
+para crear un transformador debe usarse el comando `php artisan make:transformer UserTransformer`, puedes revisar la [documentacion oficial](https://github.com/spatie/laravel-fractal).
 
 - Esquema de los transformadores, todas esta funciones son requeridas en todos los que se implementen
     ```
