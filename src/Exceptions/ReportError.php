@@ -2,8 +2,9 @@
 
 namespace Elyerr\ApiResponse\Exceptions;
 
-use Exception; 
 use Elyerr\ApiResponse\Assets\JsonResponser;
+use Exception; 
+use Illuminate\Support\Facades\View;
 
 class ReportError extends Exception
 {
@@ -26,6 +27,21 @@ class ReportError extends Exception
      */
     public function render($request)
     {
-        return  $this->message($this->message, $this->code);
+        return $request->wantsJson() ? $this->message($this->message, $this->code) :
+        $this->report_error();
+
     }
+
+    /**
+     * reporta el error en una vista report de la carpeta error
+     * @return \Illuminate\Support\Facades\View | response
+     *
+     */
+    public function report_error()
+    {
+        return View::exists('error.report') ?
+        view('error.report', ['code' => $this->code, 'message' => $this->message]) :
+        response($this->message, $this->code);
+    }
+
 }
