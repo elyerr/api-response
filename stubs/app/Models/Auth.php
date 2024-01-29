@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;  
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Elyerr\ApiResponse\Assets\Asset;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Auth extends Authenticatable
-{  
+{
     use HasUuids, HasFactory, Notifiable, Asset;
 
-        /**
+    /**
      * The data type of the auto-incrementing ID.
      *
      * @var string
@@ -37,9 +37,6 @@ class Auth extends Authenticatable
         'last_name',
         'email',
         'password',
-        'country', 
-        'address',
-        'phone',
     ];
 
     /**
@@ -75,17 +72,6 @@ class Auth extends Authenticatable
     {
         $this->attributes['email'] = strtolower($value);
     }
-  
-    public function setCountryAttribute($value)
-    {
-        $this->attributes['country'] = strtolower($value);
-    }
- 
-    public function setAddressAttribute($value)
-    {
-        $this->attributes['address'] = strtolower($value);
-    }
- 
 
     /**
      * Send the password reset notification.

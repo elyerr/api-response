@@ -2,9 +2,9 @@
 
 namespace Elyerr\ApiResponse\Console;
 
-use Illuminate\Console\Command;
 use Elyerr\ApiResponse\Assets\Asset;
 use Elyerr\ApiResponse\Assets\Console;
+use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
@@ -34,9 +34,9 @@ class InstallCommand extends Command
         $this->models();
         $this->registerController();
         $this->addMiddleware();
-        $this->addEviromentKeys(); 
-        $this->broadcastinActivate(); 
-        $this->registerChannels(); 
+        $this->addEviromentKeys();
+        $this->broadcastinActivate();
+        $this->registerChannels();
 
         $this->info('API Extend library ha sido instalada');
 
@@ -76,10 +76,9 @@ class InstallCommand extends Command
      */
     public function addMiddleware()
     {
-        $this->registerMiddleware([ 
+        $this->registerMiddleware([
             "'transform.request' => \Elyerr\ApiResponse\Middleware\TransformRequest::class",
         ], 'verified');
-
     }
 
     /**
@@ -111,7 +110,7 @@ class InstallCommand extends Command
 
         if ($process->isSuccessful()) {
             echo "Publicando configuraciones\n";
-            $this->publishAssets([ 
+            $this->publishAssets([
                 '"Spatie\Fractal\FractalServiceProvider"',
             ]);
 
@@ -163,7 +162,6 @@ class InstallCommand extends Command
             }
         }
     }
- 
 
     /**
      * agrega los middleware al kernel
@@ -259,5 +257,5 @@ class InstallCommand extends Command
             echo "Los canales han sido registrados\n";
         }
     }
- 
+
 }

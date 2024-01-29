@@ -23,7 +23,7 @@ class TransformRequest
         //transform Request
         $inputAttrs = [];
 
-        foreach ($request->request->all() as $input => $value) {
+        foreach ($request->all() as $input => $value) {
 
             //evaluamos si es un array y que sea de segunda dimencion
             if (is_array($value) and $this->array_count_dimension($value) == 2) {

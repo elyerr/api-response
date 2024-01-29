@@ -16,7 +16,6 @@ final class ServiceProvider extends Provider implements DeferrableProvider
     {
         $this->commands([
             Console\InstallCommand::class,
-            Console\RegisterRoutesCommand::class, 
         ]);
     }
 
@@ -39,7 +38,6 @@ final class ServiceProvider extends Provider implements DeferrableProvider
     {
         return [
             Console\InstallCommand::class,
-            Console\RegisterRoutesCommand::class, 
         ];
     }
 
