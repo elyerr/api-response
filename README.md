@@ -16,11 +16,6 @@ composer require elyerr/api-response dev-main
 php artisan api-response:install
 ```
 
-#### Instalar controladores de autentificación 
-estos controladores biene disponibles si estas haciendo uso de sanctum y si lo quieres usar con passport deberas modificarlos o prescindir de ellos.
-```
-php artisan api-response:auth
-```
 ## Funcionalidad de JsonResponser
 por defecto viene agregada en GlobalController, para lo cual si quieres hacer uso de ella puedes heredar de ese controlador o puedes llamar el trait en cada controlador, como mejor lo prefieras. mas acerca de los código de estado para respuestas puedes leer aquí [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status), el codgo de las devoluciones por defecto es 200
 
