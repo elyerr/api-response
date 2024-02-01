@@ -77,9 +77,23 @@ return $this->showAll($users, $users->first()->transformer, 200)
 ```
 //debe existir en el modelo la propiedad publica `public $table = "users"`
 $params = $this->filter($user->table)
+
+//busqueda con parametros
 $data = $this->search($user->table, $params)
+
+//busqueda especificado un usuario, del cual se quiere obtener info, eficiente cuadno es 
+//un microservico 
+$data = $this->search($user->table, $params, 'user_id', '$value_user_id')
+
+//busqueda sin parametros
+$data = $this->search($user->table)
+
+
+
 return $this->showAll($data)
 ```
+
+
 - usando transformadores
 ```
 //debe existir en el modelo la propiedad publica `public $table = "users"`
