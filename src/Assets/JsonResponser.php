@@ -2,11 +2,11 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 trait JsonResponser
 {
@@ -148,10 +148,28 @@ trait JsonResponser
      * realiza la busqueda de data usando LIKE, requiere del modelo y los parametros a filtrar
      * @param String $table
      * @param Array $params
+     * Requeridos cuando se desea especificar el usuario de caul se desea obtener la data
+     * @param String $user_field
+     * @param String $user_id
      * @return Collection
      */
-    public function search($table, array $params = null)
+    public function search($table, array $params = null, String $user_field = null, String $user_id = null)
     {
+        /**
+         * requerido cuando se desea obtener data espefica de un usuario, esta funcionalidad
+         * es util cuando se usa microservicios y se desea obtener la data del usuario authenticado
+         */
+        if (isset($user_field)) {
+            //busqueda con parametros
+            if (isset($params)) {
+                foreach ($params as $key => $value) {
+                    return DB::table($table)->where($user_field, '=', $user_id)->where($key, "LIKE", "%{$value}%")->get();
+                }
+            }
+            //sin parametros
+            return DB::table($table)->where($user_field, '=', $user_id)->get();
+        }
+
         //busqueda con parametros
         if (isset($params)) {
             foreach ($params as $key => $value) {
