@@ -58,21 +58,6 @@ class Auth extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtolower($value);
-    }
-
-    public function setLastNameAttribute($value)
-    {
-        $this->attributes['last_name'] = strtolower($value);
-    }
-
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['email'] = strtolower($value);
-    }
-
     /**
      * Send the password reset notification.
      *

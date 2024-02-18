@@ -15,21 +15,6 @@ class GlobalController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
-    }
-
-    public function AuthKey()
-    {
-        return request()->user()->id;
-    }
-
-    public function lowercase($value)
-    {
-        return strtolower($value);
-    }
-
-    public function uppercase($value)
-    {
-        return strtoupper($value);
+        //$this->middleware('server');
     }
 }
