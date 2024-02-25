@@ -19,7 +19,7 @@ trait Asset
     public function passwordTempGenerate($len = 15)
     {
 
-        $string =  str_split("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789*#!");
+        $string = str_split("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789*#!");
 
         //nueva cadena a generar
 
@@ -78,7 +78,7 @@ trait Asset
         if ($update_is_null) {
             return true;
         }
-        return $new_value ? strtolower($old_value) != strtolower($new_value) : false;
+        return $new_value ? $old_value != $new_value : false;
     }
 
     /**
@@ -167,13 +167,13 @@ trait Asset
     }
 
     /**
-     * cuenta cuantas dimensiones tiene un array, devolviendo un valor numerico 
+     * cuenta cuantas dimensiones tiene un array, devolviendo un valor numerico
      * correspondiente a la dimension, si no es un array devolvera 0
      * @param Array $array
      * @param Int
      */
     public function array_count_dimension($array)
-    {   
+    {
         $dimension = 0;
         //funcion anonima
         $count_dimension = function ($array) use (&$dimension, &$count_dimension) {
