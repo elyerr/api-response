@@ -2,7 +2,10 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
+use DateTime;
+use DateTimeZone;
 use ErrorException;
+use DateInvalidTimeZoneException;
 
 /**
  *
@@ -88,7 +91,28 @@ trait Asset
      */
     public function format_date($date)
     {
-        return isset($date) ? date('Y-m-d H:i:s', strtotime($date)) : null;
+        /**
+         * is null
+         */
+        if (!isset($date)) {
+            return null;
+        }
+
+        /**
+         * get the header and convert utc time in local time for the user
+         */
+        $localtime = request()->header('X-LOCALTIME');
+
+        $date = new DateTime($date, new DateTimeZone('UTC'));
+
+        try {
+
+            $date->setTimezone(new DateTimeZone($localtime));
+
+        } catch (DateInvalidTimeZoneException $e) {}
+
+        return $date->format('Y-m-d H:i:s');
+
     }
 
     /**
