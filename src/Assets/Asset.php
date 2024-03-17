@@ -2,10 +2,10 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
+use DateInvalidTimeZoneException;
 use DateTime;
 use DateTimeZone;
 use ErrorException;
-use DateInvalidTimeZoneException;
 
 /**
  *
@@ -89,7 +89,7 @@ trait Asset
      * @param String $date
      * @return DateTime
      */
-    public function format_date($date)
+    public function format_date($date, $format = "Y-m-d H:i:s")
     {
         /**
          * is null
@@ -111,7 +111,7 @@ trait Asset
 
         } catch (DateInvalidTimeZoneException $e) {}
 
-        return $date->format('Y-m-d H:i:s');
+        return $date->format($format);
 
     }
 
