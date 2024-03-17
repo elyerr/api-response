@@ -179,7 +179,11 @@ este trait puede ser impementado en un modelo para que no use transformaderes pa
     $this->is_diferent('valor_antiguo', '', true); //true
 
     ```
-- `format_date(string)`, tranforma una fecha que puede provenir de un campo de una tabla, esta normalmente se usa en los transformadores, el formato que usa es `Y-m-d H:i:s`
+- `format_date(string)`, Esta funcion se debe usar sobre datos de tipo time con su forma base en UTC, cuado se use esta funcion se debe pasar una cabecera del lado del cliente `X-LOCALTIME` con el localtime en el siguiente formato por ejemplo `"America/Denver" ` lo cual retornara un valor de la hora actual para dicho usuario en el siguiente formato `Y-m-d H:i:s` 
+  - si esta usando js lo puedes pasar por la cabecera de la siguiente forma en las peticiones, esto capturará de forma automatica la zona del usuario para otro lenguaje puedes revisar su documentacion oficial.
+    ```
+    "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone
+    ```
   - forma de uso
     ```
     $this->format_date($user->created_at) 
