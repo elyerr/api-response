@@ -6,6 +6,7 @@ use DateInvalidTimeZoneException;
 use DateTime;
 use DateTimeZone;
 use ErrorException;
+use Exception;
 
 /**
  *
@@ -98,18 +99,17 @@ trait Asset
             return null;
         }
 
-        /**
-         * get the header and convert utc time in local time for the user
-         */
-        $localtime = request()->header('X-LOCALTIME');
-
         $date = new DateTime($date, new DateTimeZone('UTC'));
 
         try {
+            /**
+             * get the header and convert utc time in local time for the user
+             */
+            $localtime = request()->header('X-LOCALTIME');
 
             $date->setTimezone(new DateTimeZone($localtime));
 
-        } catch (DateInvalidTimeZoneException $e) {}
+        } catch (DateInvalidTimeZoneException $e) {} catch (Exception $e) {}
 
         return $date->format($format);
 
