@@ -55,15 +55,18 @@ trait JsonResponser
      * @param \Illuminate\Support\Collection $collection
      * @param $transformer
      * @param Integer $code
+     * @param Boolean $pagination
      * @return Json
      */
-    public function showAll($collection, $transformer = null, $code = 200)
+    public function showAll($collection, $transformer = null, $code = 200, $pagination = true)
     {
         //ordena los datos
         $collection = $this->orderBy($collection);
 
         //pagina los datos
-        $collection = $this->paginate($collection);
+        if ($pagination) {
+            $collection = $this->paginate($collection);
+        }
 
         //transforma los datos
         if ($transformer != null && gettype($transformer) != "integer") {
