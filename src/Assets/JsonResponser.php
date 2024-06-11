@@ -158,29 +158,28 @@ trait JsonResponser
      */
     public function search($table, array $params = null, String $user_field = null, String $user_id = null)
     {
-        /**
-         * requerido cuando se desea obtener data espefica de un usuario, esta funcionalidad
-         * es util cuando se usa microservicios y se desea obtener la data del usuario authenticado
-         */
-        if (isset($user_field)) {
-            //busqueda con parametros
-            if (isset($params)) {
-                foreach ($params as $key => $value) {
-                    return DB::table($table)->where($user_field, '=', $user_id)->where($key, "LIKE", "%{$value}%")->get();
-                }
-            }
-            //sin parametros
-            return DB::table($table)->where($user_field, '=', $user_id)->get();
+        $sql = "SELECT * FROM {$table}";
+        $bindings = [];
+
+        if ($user_field && $user_id) {
+            $sql .= " WHERE {$user_field} = ?";
+            $bindings[] = $user_id;
         }
 
-        //busqueda con parametros
-        if (isset($params)) {
+        if ($params) {
             foreach ($params as $key => $value) {
-                return DB::table($table)->where($key, "LIKE", "%{$value}%")->get();
+                if (empty($bindings)) {
+                    $sql .= " WHERE {$key} LIKE ?";
+                } else {
+                    $sql .= " AND {$key} LIKE ?";
+                }
+                $bindings[] = "%{$value}%";
             }
         }
-        //sin parametros
-        return DB::table($table)->get();
+
+        $results = DB::select($sql, $bindings);
+
+        return collect($results);
     }
 
     /**
