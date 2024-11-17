@@ -1,349 +1,320 @@
-# api-response
-Extensión para APIs bajo el framework de Laravel, incluye funciones que permite filtrar, buscar,ordenar, paginar datos devolviendo en formato json
+# API Response
 
-#### Instalar versión stable
-```
+Extension for APIs under the Laravel framework, includes functions for filtering, searching, sorting, and paginating data, returning it in JSON format.
+
+### Installing the Stable Version
+
+```bash
 composer require elyerr/api-response
 ```
 
-#### Instalar version en desarrollo
-```
+### Installing the Development Version
+
+```bash
 composer require elyerr/api-response dev-main
 ```
 
-#### Installar lo necesario
-```
+#### Install Required Components
+
+```bash
 php artisan api-response:install
 ```
 
-## Funcionalidad de JsonResponser
-por defecto viene agregada en GlobalController, para lo cual si quieres hacer uso de ella puedes heredar de ese controlador o puedes llamar el trait en cada controlador, como mejor lo prefieras. mas acerca de los código de estado para respuestas puedes leer aquí [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status), el codgo de las devoluciones por defecto es 200
+## Functionality of JsonResponser
 
-#### Descripcion y uso de funciones
-- `message(mensaje, codigo)`; devuelve la informacion en formato Json
-- formas de uso
-```
-return $this->message('respuesta correcta')
-return $this->message('recurso creado', 201)
-```
-- `data(colleccion, codigo)`; devuelve una colección en formato Json
-- Formas de uso
-```
-return $this->data([
-[id => 1, name => 'test 1'],
-[id => 2, name => 'test 2']
-], 200);
+By default, this functionality is added to the GlobalController. To use it, you can either extend that controller or include the trait in each controller as needed. For more on HTTP response status codes, refer to HTTP response status codes. The default response code is 200.
+
+#### Description and Usage of Functions
+
+```php
+ /**
+     * Return a message in json format
+     * @param mixed $message message
+     * @param mixed $code http status code
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function message($message, $code = 200)
 ```
 
-- `showOne(Objecto, $transformador, codigo)`; devulve un objeto en formato Json, usa un parámetro [transformador](https://github.com/spatie/laravel-fractal), puedes seguir el link para conocer acerca de [laravel fractal](https://github.com/spatie/laravel-fractal)]
-- formas de uso
-- Ejemplo sin transformador
-```
-$user = User::find(1);
+```php
 
-return $this->showOne($user)
-return $this->showOne($user, 201)
-
-```
-- Usando transformador: puedes leer mas abajo la sección de configuración de transformador
-```
-$user = User::find(2);
-return $this->showOne($user, $user->transformer)
-return $this->showOne($user, $user->transformer, 201)
-
-```
-- `showAll(colleccion, transformador, codigo)`
-esta funcion permite mostrar datos de una colleccion en formato Json, esta tiene la funcionalidad de ordenar datos, paginarlos, transformarlos.
-- para ordenarlos se deben pasar los parametros por url 
-- order_by : recibe el nombre del campo a ordena
-- order_type : recibes dos datos `desc` y `asc`, este parámetro viene siendo no obligatorios
-- la paginacion se realiza de forma automática tiene valor por defecto pero también se le pueden cambiar por los que se requiera, esta valor al igual que el anterior se pasan como parámetros.
-- per_page : por defecto es 15
-- formas de uso sin transformador
-```
-$users = User::all();
-return $this->showAll($users)
-```
-- forma de uso con transformador **Ver la sección acerca de los tranformadores**
-```
-$users = User::all();
-return $this->showAll($users, UserTransformer::class, 200)
-
-// usando la propiedad publica en el modelo user
-
-return $this->showAll($users, $users->first()->transformer, 200)
-```
-- incorporar la funcion de busqueda en el metodo `showAll()` sin transformador
-```
-//debe existir en el modelo la propiedad publica `public $table = "users"`
-$params = $this->filter($user->table)
-
-//busqueda con parametros
-$data = $this->search($user->table, $params)
-
-//busqueda especificado un usuario, del cual se quiere obtener info, eficiente cuadno es 
-//un microservico 
-$data = $this->search($user->table, $params, 'user_id', '$value_user_id')
-
-//busqueda sin parametros
-$data = $this->search($user->table)
-
-
-
-return $this->showAll($data)
+     /**
+     * Return data in json format
+     * @param mixed $collection
+     * @param mixed $code
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function data($collection, $code = 200)
 ```
 
+```php
 
-- usando transformadores
-```
-//debe existir en el modelo la propiedad publica `public $table = "users"`
-//debe existir la propiedad transformer en el modelo. **ver mas la sección de transformadores**
-$params = $this->filter_transform($user->transformer)
-$data = $this->search($user->table, $params)
-return $this->showAll($data, $user->transformer)
-```
-- `collumns_name_table(tabla)`
-obtiene todas las claves de la tabla 
-- formas de uso
-```
-$nombres = $this->collumns_name_table($user->table)
-```
-- `paginate(collecccion, perPage=15)`
-pagina una colleccion por defecto su valor es 15 pero puede ser cambiado por el que desee
-- formas de uso
-```
-$users = User::all();
-
-data = $this->paginate($users, 100)
+    /**
+     * Show one resource la object in json format
+     * @param mixed $model Model instance
+     * @param mixed $transformer  Model to transform data
+     * @param mixed $code Http status code
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function showOne($model, $transformer = null, $code = 200)
 ```
 
-- `filter_transform($transformer)`
-Como parametro recibe una clase Trasnformadora, devulve todos los campos una tabla transformada o enmascarada.
-- formas de uso
-```
-$params = $this->filter_transform($user->transformer);
+```php
 
-```
-
-- `filter(tabla)`, igual que la anterior pero usa el nombre de la tabla
-- formas de uso
-```
-$params = $this->filter($user->table)
-
+     /**
+     * Show all data from any collection in json
+     * @param mixed $collection
+     * @param mixed $transformer
+     * @param mixed $code
+     * @param mixed $pagination
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function showAll($collection, $transformer = null, $code = 200, $pagination = true)
 ```
 
-- `search(tabla, parametros)`, esta función realiza una búsqueda usando el operador LIKE y solo acepta como parámetros los campos de la tabla del modelo que se este empleando, esta se suele usar junto con las dos funciones anteriores permitiendo enmascarar las busquedas o simplemente mostrado los campos como esta en la base de datos
-- Formas de uso
-```
-// puede ser asi
-$params = $this->filter_transform($user->transformer);
-// o puede ser asi
-$params = $this->filter($user->table)
+```php
 
-//se puede usar con parametros
-$data = $this->search($user->table, $params)
-
-//o sin parametros
-$data = $this->search($user->table)
-
+     /**
+     * Get the columns name form any table
+     * @param mixed $table table name
+     * @return array
+     */
+    public function columns_name_table($table)
 ```
 
-- `orderBy($colleccion)`
-esta función viene integrada en la función principal `showAll`, y los parámetros, se le pasan por url, puedes ver la sección de `showAll` para entender su funcionamiento
+```php
+    /**
+     * Generate a pagination to the collection
+     * @param mixed $collection
+     * @param mixed $per_page
+     * @return LengthAwarePaginator
+     */
+    public function paginate($collection, $per_page = 15)
+```
 
-## Funcionalidad de Timestamps
-este trait puede ser impementado en un modelo para que no use transformaderes para formatear la fecha de las fechas en el formato `AÑO-MES-DIA H:I`   por ejemplo `2023-12-01 15:30`
+```php
 
-## Funcionalidad  de Asset
+    /**
+     * Transform the all request using the Transform class for current model
+     * through the method getOriginalAttributes
+     * @param mixed $transformer
+     * @return array
+     */
+    public function filter_transform($transformer)
+```
 
-- `passwordTempGenerate(len)`; genera una cadena aleatoria, por defecto es de 15
-  - formas de uso
-    ```
-     $this->passwordTempGenerate(20);
-    ```
-- `generateUniqueCode($id, $includeDate, $includeLetters, $numLetters)`; genera un codigo unico.
-  - formas de uso
-    ```
-    this->generateUniqueCode()
-    this->generateUniqueCode(11001, true, true, 10)
-    
-    ```
-- `is_diferent($old_value, $new_value, $update_is_null)`, verifica si una cadena de texto ha cambiado
-  - `old_value` : valor a verificar o valor antiguo
-  - `new_value` : valor nuevo que va a reemplazar el anterior
-  - `update_is_null`:  por defecto es `false`, si se cambia a true, verificara si asi sea nulo el valor
-  - formas de uso
-    ```
-    $this->is_diferent('valor_antiguo', 'valor nuevo'); //true
-    $this->is_diferent('valor_antiguo', ''); //false
-    $this->is_diferent('valor_antiguo', '', true); //true
+```php
 
-    ```
-- `format_date(string)`, Esta funcion se debe usar sobre datos de tipo time con su forma base en UTC, cuado se use esta funcion se debe pasar una cabecera del lado del cliente `X-LOCALTIME` con el localtime en el siguiente formato por ejemplo `"America/Denver" ` lo cual retornara un valor de la hora actual para dicho usuario en el siguiente formato `Y-m-d H:i:s`; si no se le pasa la cabecera retornará el tiempo en formato UTC
-  - si esta usando js lo puedes pasar por la cabecera de la siguiente forma en las peticiones, esto capturará de forma automatica la zona del usuario para otro lenguaje puedes revisar su documentacion oficial.
-    ```
-    "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone
-    ```
-  - forma de uso
-    ```
-    $this->format_date($user->created_at) 
-    ```
-- `verify_time_is_betweem(inicio, final)`, verifica si la fecha actual esta en un rango de fechas
-  - Formas de uso
-    ``` 
-    $this->verify_time_is_betweem('2022-12-13', '2023-11-22')
-    $this->verify_time_is_betweem('2022-12-13 12:15', '2023-12-22 23:45')
-    ```
-- `changeIndex(index)`, nomalmente se usa para transformar parametros del request en los transformadores, el middleware `transform.request:transformador`  debe ser agregado para los metodos store y update en el controlador en uso o bueno en las cunciones para crear o actualizar recursos
-  - Formas de uso
-    ```
-    //formas de aplicacion del trasnformador en el controlador
-    public function __construct(User $user){
-        $this->middleware('transform.request:' . $user->transformer)
+    /**
+     * Filter data using the column of the table
+     * @param mixed $table
+     * @return array
+     */
+    public function filter($table)
+```
+
+```php
+
+    /**
+     * Search values
+     * @param mixed $table table name of the model
+     * @param array $params params of the model
+     * @param string $user_field name of field in the table
+     * @param string $user_id current user id
+     * @return Collection
+     */
+    public function search($table, array $params = null, string $user_field = null, string $user_id = null)
+```
+
+```php
+
+    /**
+     * Order by collection using params order_by and order_type
+     * @param mixed $collection
+     * @return Collection
+     */
+    public function orderBy($collection)
+```
+
+## Functionality of Timestamps
+
+This trait can be implemented in a model to bypass transformers when formatting dates. Dates will automatically be formatted in the `YEAR-MONTH-DAY H:I` format, for example, `2023-12-01 15:30`.
+
+## Functionality de Asset
+
+```php
+ /**
+     * Generate a random string
+     * @param int $len
+     * @return string
+     */
+    public function passwordTempGenerate($len = 15)
+```
+
+```php
+
+     /**
+     * Generate a unique random id
+     * @param mixed $id
+     * @param mixed $includeDate
+     * @param mixed $includeLetters
+     * @param mixed $numLetters
+     * @return string
+     */
+    public function generateUniqueCode($id = null, $includeDate = true, $includeLetters = true, $numLetters = 5)
+```
+
+```php
+
+  /**
+     * Check if two string are different
+     * @param mixed $old_value current value on your model
+     * @param mixed $new_value key to get by request
+     * @param mixed $update_is_null  key to update if the new value is empty
+     * @return bool
+     */
+    public function is_different($old_value, $new_value, $update_is_null = false)
+```
+
+```php
+
+    /**
+     * Format date in your current country date using a custom header (X-LOCALTIME) in js
+     * can use this example  "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone
+     *
+     * @param mixed $date
+     * @param mixed $format default format (Y-m-d H:i:s)
+     * @return string
+     */
+    public function format_date($date, $format = "Y-m-d H:i:s")
+```
+
+```php
+
+     /**
+     * Checking the time in two dates
+     * @param mixed $in time to check
+     * @param mixed $out end of time to check
+     * @return bool
+     */
+    public function verify_time_is_between($in, $out)
+```
+
+```php
+
+    /**
+     * Change key in the transformer model, this work in this functions (transformRequest y transformResponse)
+     * @param mixed $index
+     * @return array|String|string
+     */
+    public static function changeIndex($index)
+```
+
+```php
+
+    /**
+     * Add new string into a file
+     * @param string $file file
+     * @param int $index index to replace value
+     * @param string $value value to replace
+     * @param mixed $replace
+     * @param bool $repeat
+     * @return void
+     */
+    public function addString($file, $index, $value, $replace = 0, $repeat = false)
+```
+
+```php
+
+    /**
+     * Transform any file in array collection
+     * @param mixed $file
+     * @return array
+     */
+    public function fileToArray($file)
+```
+
+```php
+    /**
+     * Check how many dimension has an array
+     * @param mixed $array
+     * @return int
+     */
+    public function array_count_dimension($array)
+```
+
+## Functionality of transformers
+
+To create a transformer, use the command `php artisan make:transformer UserTransformer`. You can refer to the [official documentation](https://github.com/spatie/laravel-fractal) for more details.
+
+```php
+
+    /**
+     * Transform a collection data to output information to the user
+     * 
+     */
+    public function transform($data)
+    {
+          return [
+              'id' => $data->id,
+              'name' => $data->name,
+              'description' => $data->description,
+          ];
     }
 
-    //ejemplo reglas en el request
-    public function rules()
-    { 
-        return [
-            'user' => ['required', 'array'],
-            'user.*.name' => ['required','exists:table,id'],
-            'user.*.last_name' => ['required','integer'],
-        ];
-    }
-
-    //estas funcion debe ser implementada en el transformador
+    /**
+     * Transform request
+     * @param string $index
+     * @return string|null
+     */
     public static function transformRequest($index)
-    {   
-        //forma de uso
-        $index = Asset::changeIndex($index);
-
+    {
         $attribute = [
-            'user' => 'user',
-            'user.*.nombre' => 'user.*.name',
-            'user.*.apellido' => 'user.*.last_name',
+            'name' => 'firsName',
+            'description' => 'detail',
         ];
-         
         return isset($attribute[$index]) ? $attribute[$index] : null;
     }
 
+    /**
+     * Transform response 
+     * @param string $index
+     * @return string|null
+     */
     public static function transformResponse($index)
     {
-        $index = Asset::changeIndex($index);
-
         $attribute = [
-            'user' => 'user',
-            'user.*.name' => 'user.*.nombre',
-            'user.*.last_name' => 'user.*.apellido',
+            'firsName' => 'name',
+            'detail' => 'description',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
     }
-    ```
-
-- `addString($file, $index, $value, $replace = 0, $repeat = false)`, agrega un texto a un archivo en php.
-  - `file`, ruta del archivo
-  - `index`, posicion de la linea en el archivo don ira el texto,
-  - `value`, valor que se agregara al archivo
-  - `repacle`, 1 para remplazar y 0 para no remplazar
-  - `repeat`, true para agregar la linea en caso exista, y false para no agregarla si ya existe,
-
-  - formas de uso
-    ```
-    $file = 'ruta';
-
-    //
-    $this->addString($file, 12, "nuevo texto", 1, false)
-    ```
-
-- `fileToArray(file)`, convierte cada linea de un archivo en array
-  - formas de uso
-    ```
-    $file = 'ruta';
-    $this->fileToArray($file);
-    ```
-- `array_count_dimension(array)`; cuenta las dimenciones de un array
-  - formas de uso
-    ```
-    $array = [
-        [
-            [
-                'id' => 1,
-                'name' => 'tess'
-            ]
-        ]
-    ]
-    $this->array_count_dimension($array) //3
-    ```
-
-## Uso de los Transformadores
-para crear un transformador debe usarse el comando `php artisan make:transformer UserTransformer`, puedes revisar la [documentacion oficial](https://github.com/spatie/laravel-fractal).
-
-- Esquema de los transformadores, todas esta funciones son requeridas en todos los que se implementen
-    ```
-    public function transform($role)
-        {
-            return [
-                'id' => $role->id,
-                'role' => $role->name,
-                'descripcion' => $role->description,
-            ];
-        }
-
-        public static function transformRequest($index)
-        {
-            $attribute = [
-                'role' => 'name',
-                'descripcion' => 'description',
-            ];
-
-            return isset($attribute[$index]) ? $attribute[$index] : null;
-        }
-
-        public static function transformResponse($index)
-        {
-            $attribute = [
-                'name' => 'role',
-                'description' => 'descripcion',
-            ];
-
-            return isset($attribute[$index]) ? $attribute[$index] : null;
-        }
-
-        public static function getOriginalAttributes($index)
-        {
-            $attributes = [
-                'id' => 'id',
-                'nombre' => 'name',
-                'descripcion' => 'description',
-            ];
-
-            return isset($attributes[$index]) ? $attributes[$index] : null;
-        }
-
-    ```
-
-- Aplicacion en la clase
-
-    ```
-
-    class User extends Auth
+      
+    /**
+     * Set the attributes to transform filters
+     * 
+     * @param string $index
+     * @return string|null
+     */
+    public static function getOriginalAttributes($index)
     {
-        
-        public $table = "users";
-
-
-        public $transformer = UserTransformer::class;
-
-    }   
-
-
-    ```
-- Aplicacion en el controlador
-
-    ```
-    public function __construct(User $user){
-        $this->middleware('transform.request:' . $user->transformer)
+        $attributes = [
+            'identifier' => 'id',
+            'firsName' => 'name',
+            'detail' => 'description',
+          ];
+        return isset($attributes[$index]) ? $attributes[$index] : null;
     }
+```
 
-    ```
+ 
+
+# Apply middleware into the controller
+
+```php
+  public function __construct(Model $model){
+      $this->middleware('transform.request:' . $model->transformer)
+  }
+```
+ 
