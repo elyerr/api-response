@@ -1,6 +1,6 @@
 {
     "name": "elyerr/api-response",
-    "description": "Proporciona funcionalidad extra a una API bajo el framework Laravel",
+    "description": "Add news functionalities into the Laravel Framework",
     "type": "library",
     "license": "AGPL-3.0-only",
     "extra": {

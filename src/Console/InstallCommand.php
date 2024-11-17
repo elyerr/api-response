@@ -18,7 +18,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Registra dependencias como middleware,broadcasting,KeyEviroment,Models';
+    protected $description = 'Register all dependencies';
 
     /**
      * Execute the console command.
@@ -34,16 +34,16 @@ class InstallCommand extends Command
         $this->models();
         $this->registerController();
         $this->addMiddleware();
-        $this->addEviromentKeys();
-        $this->broadcastinActivate();
+        $this->addEnvironmentKeys();
+        $this->broadcastingActivate();
         $this->registerChannels();
 
-        $this->info('API Extend library ha sido instalada');
+        $this->info('Api Response installed successfully');
 
     }
 
     /**
-     * generacion de clases,eventos, controladores personalidas
+     * Install stubs or templates to use in your project
      * @return void
      */
     public function installStubs()
@@ -53,6 +53,10 @@ class InstallCommand extends Command
         $this->fileSystem()->copyDirectory($sourcePathStubs, $targetPathStubs);
     }
 
+    /**
+     * Install default models to work in your Laravel Project
+     * @return void
+     */
     public function models()
     {
 
@@ -67,11 +71,10 @@ class InstallCommand extends Command
         if (!file_exists(base_path($auth))) {
             copy($source . $auth, base_path($auth));
         }
-
     }
 
     /**
-     * agrega middlware al kernerl en laravel
+     * Add middleware into the kernel.php file
      * @return void
      */
     public function addMiddleware()
@@ -82,10 +85,9 @@ class InstallCommand extends Command
     }
 
     /**
-     * Instalando dependencias mediante composer
-     *
-     * @param  array  $packages
-     * @param  bool  $asDev
+     * Install packages into the Laravel project
+     * @param array $packages
+     * @param mixed $asDev
      * @return void
      */
     protected function requireComposerPackages(array $packages, $asDev = false)
@@ -94,10 +96,8 @@ class InstallCommand extends Command
 
         $process = new Process($command);
         $process->setWorkingDirectory(base_path());
-
         $process->start();
 
-        //mostrar proceso
         foreach ($process as $type => $data) {
             if (Process::ERR === $type) {
                 echo $data;
@@ -109,20 +109,19 @@ class InstallCommand extends Command
         $process->wait();
 
         if ($process->isSuccessful()) {
-            echo "Publicando configuraciones\n";
+            echo "Publish config files\n";
             $this->publishAssets([
                 '"Spatie\Fractal\FractalServiceProvider"',
             ]);
 
         } else {
-            echo "Ha ocurrido un error en la ejecución. " . $process->getErrorOutput() . "\n";
+            echo "Something is wrong " . $process->getErrorOutput() . "\n";
         }
     }
 
     /**
-     * Publicando providers.
-     *
-     * @param  array  $providers
+     * Publish providers 
+     * @param array $providers
      * @return void
      */
     protected function publishAssets(array $providers)
@@ -130,7 +129,6 @@ class InstallCommand extends Command
         foreach ($providers as $provider) {
 
             $command = "php artisan vendor:publish --provider={$provider}";
-
             $descriptorspec = [
                 0 => ['pipe', 'r'],
                 1 => ['pipe', 'w'],
@@ -153,20 +151,19 @@ class InstallCommand extends Command
                 if ($returnCode === 0) {
                     echo $output;
                 } else {
-                    echo "Error al ejecutar el comando. Código de retorno: {$returnCode}\n";
-                    echo "Salida de error:\n";
+                    echo "Error: $returnCode\n";
                     echo $errorOutput;
                 }
             } else {
-                echo "No se pudo ejecutar el proceso.\n";
+                echo "Can not run the process.\n";
             }
         }
     }
 
     /**
-     * agrega los middleware al kernel
-     * @param Array $middlewares
-     * @param String $after
+     * Register middleware into the kernel.php file
+     * @param array $middlewares
+     * @param mixed $after
      * @return void
      */
     protected function registerMiddleware(array $middlewares, $after)
@@ -191,10 +188,10 @@ class InstallCommand extends Command
     }
 
     /**
-     * agregar variables de entorno
+     * Add new environment keys into the file .env
      * @return void
      */
-    protected function addEviromentKeys()
+    protected function addEnvironmentKeys()
     {
 
         $readFile = fopen(base_path('.env'), 'r');
@@ -204,14 +201,18 @@ class InstallCommand extends Command
             while (!feof($readFile)) {
                 $line = fgets($readFile);
                 $index += 1;
-                if (strpos($line, 'ROADCAST_DRIVER') &&
-                    strpos(file_get_contents(base_path('.env')), "HANNEL_NAME") === false) {
+                if (
+                    strpos($line, 'ROADCAST_DRIVER') &&
+                    strpos(file_get_contents(base_path('.env')), "HANNEL_NAME") === false
+                ) {
                     $this->addString(base_path('.env'), $index, "CHANNEL_NAME='kumal'\n");
                     echo "Variable de entorno {CHANNEL_NAME} agregada al archivo .env\n";
                 }
 
-                if (strpos($line, 'EDIS_HOST') &&
-                    strpos(file_get_contents(base_path('.env')), "EDIS_PREFIX=") === false) {
+                if (
+                    strpos($line, 'EDIS_HOST') &&
+                    strpos(file_get_contents(base_path('.env')), "EDIS_PREFIX=") === false
+                ) {
                     $this->addString(base_path('.env'), $index, "REDIS_PREFIX=''\n");
                     echo "Variable de entorno {REDIS_PREFIX} agregada al archivo .env\n";
                 }
@@ -221,9 +222,10 @@ class InstallCommand extends Command
     }
 
     /**
-     * activa el broadcast
+     * Activate the broadcasting into the project
+     * @return void
      */
-    protected function broadcastinActivate()
+    protected function broadcastingActivate()
     {
         $file = base_path('config/app.php');
         $readFile = fopen($file, 'r');
@@ -234,7 +236,7 @@ class InstallCommand extends Command
                 $line = fgets($readFile);
                 if (strpos($line, 'App\Providers\BroadcastServiceProvider::class')) {
                     $this->addString($file, $index, "\t\tApp\Providers\BroadcastServiceProvider::class,\n", 1);
-                    print("BroadCasting Activado\n");
+                    print ("BroadCasting Activado\n");
                 }
                 $index += 1;
             }
@@ -242,7 +244,8 @@ class InstallCommand extends Command
     }
 
     /**
-     * registra los canales y el provider
+     * Register default channels
+     * @return void
      */
     protected function registerChannels()
     {
@@ -254,7 +257,7 @@ class InstallCommand extends Command
 
         if ($readChannel) {
             $this->addString($channel, 15, $routes, 3);
-            echo "Los canales han sido registrados\n";
+            echo "Channels installed successfully\n";
         }
     }
 

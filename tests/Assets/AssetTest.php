@@ -45,8 +45,8 @@ class AssetTest extends TestCase
             use Asset;
         };
 
-        $this->assertFalse($asset->verify_time_is_betweem("2023-12-12", "2023-12-25"));
-        $this->assertTrue($asset->verify_time_is_betweem("2023-10-04", "2023-10-25"));
+        $this->assertFalse($asset->verify_time_is_between("2023-12-12", "2023-12-25"));
+        $this->assertTrue($asset->verify_time_is_between("2023-10-04", "2023-10-25"));
 
     }
 

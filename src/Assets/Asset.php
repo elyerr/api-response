@@ -13,49 +13,40 @@ use Exception;
  */
 trait Asset
 {
-
     /**
-     * Set the temporal password.
-     *
-     * @param  paramType  $value
-     * @return void
+     * Generate a random string
+     * @param int $len
+     * @return string
      */
     public function passwordTempGenerate($len = 15)
     {
 
+        $password = null;
         $string = str_split("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789*#!");
 
-        //nueva cadena a generar
-
-        $password = null;
-
-        //cantidad de letras a tomar del abc y generear unnuevo string
-
         for ($i = 0; $i < $len; $i++) {
-
             $password .= $string[random_int(0, count($string) - 1)];
-
         }
         return $password;
     }
 
     /**
-     * genera un codigo unico
-     * @param String $id
-     *
+     * Generate a unique random id
+     * @param mixed $id
+     * @param mixed $includeDate
+     * @param mixed $includeLetters
+     * @param mixed $numLetters
+     * @return string
      */
     public function generateUniqueCode($id = null, $includeDate = true, $includeLetters = true, $numLetters = 5)
     {
-        // Generar la parte del ID
         $code = isset($id) ? $id : rand(1, 9);
         $code .= "-";
 
-        // Generar la parte de la fecha actual
         if ($includeDate) {
             $code .= strtotime(now());
         }
 
-        // Generar la parte de letras aleatorias
         if ($includeLetters) {
             $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $lettersLength = strlen($letters);
@@ -64,20 +55,17 @@ trait Asset
                 $code .= $letters[rand(0, $lettersLength - 1)];
             }
         }
-
         return $code;
     }
 
     /**
-     * verifica si dos valores son diferentes y recibe 3 parametros
-     * el ultimo parametro es opcional se utiliza cuando quieres que
-     * actualize valores nulos
-     * @param mixed $old_value
-     * @param mixed $new_value
-     * @param boolean $update_is_null
-     * @return boolean
+     * Check if two string are different
+     * @param mixed $old_value current value on your model
+     * @param mixed $new_value key to get by request
+     * @param mixed $update_is_null  key to update if the new value is empty
+     * @return bool
      */
-    public function is_diferent($old_value, $new_value, $update_is_null = false)
+    public function is_different($old_value, $new_value, $update_is_null = false)
     {
         if ($update_is_null) {
             return true;
@@ -86,9 +74,12 @@ trait Asset
     }
 
     /**
-     * formatea una fecha con el formato Y-m-d H:i:s
-     * @param String $date
-     * @return DateTime
+     * Format date in your current country date using a custom header (X-LOCALTIME) in js
+     * can use this example  "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone
+     *
+     * @param mixed $date
+     * @param mixed $format default format (Y-m-d H:i:s)
+     * @return string
      */
     public function format_date($date, $format = "Y-m-d H:i:s")
     {
@@ -109,28 +100,29 @@ trait Asset
 
             $date->setTimezone(new DateTimeZone($localtime));
 
-        } catch (DateInvalidTimeZoneException $e) {} catch (Exception $e) {}
+        } catch (DateInvalidTimeZoneException $e) {
+        } catch (Exception $e) {
+        }
 
         return $date->format($format);
 
     }
 
     /**
-     * Verifica que dos fechas esten en el rango
-     * @param String $in
-     * @param String $out
-     * @return boolean
+     * Checking the time in two dates
+     * @param mixed $in time to check
+     * @param mixed $out end of time to check
+     * @return bool
      */
-    public function verify_time_is_betweem($in, $out)
+    public function verify_time_is_between($in, $out)
     {
         return strtotime(now()) >= strtotime($in) and strtotime(now()) < strtotime($out);
     }
 
     /**
-     * funciona para transformar parametros detro de las funciones trasnformRequest y transformResponse
-     * como parametro recibe el index
-     * @param String $index
-     * @return String
+     * Change key in the transformer model, this work in this functions (transformRequest y transformResponse)
+     * @param mixed $index
+     * @return array|String|string
      */
     public static function changeIndex($index)
     {
@@ -143,35 +135,32 @@ trait Asset
     }
 
     /**
-     * añade un nuevo texto en una nueva linea dentro del archivo
-     * @param String $file
-     * @param Int $index
-     * @param String $value
-     * @param Boolean $repeat
+     * Add new string into a file
+     * @param string $file file
+     * @param int $index index to replace value
+     * @param string $value value to replace
+     * @param mixed $replace
+     * @param bool $repeat
      * @return void
      */
     public function addString($file, $index, $value, $replace = 0, $repeat = false)
     {
         $lines = $this->fileToArray($file);
 
-        //comprovamos que el valor no exista
         if (!$repeat and strpos(file_get_contents($file), $value) === false) {
-            //agregamo el nuevo valor al indice que queremos
+
             array_splice($lines, $index, $replace, $value);
 
-        } elseif ($repeat) { //si no son necesarios valores repetidos
-            //agregamo el nuevo valor al indice que queremos
+        } elseif ($repeat) {
             array_splice($lines, $index, $replace, $value);
         }
-        //reemplazar los datos del archivo original
-        //con los datos del array
         file_put_contents($file, $lines);
     }
 
     /**
-     * convierte un archivo en array
-     * @param String $file
-     * @return Array
+     * Transform any file in array collection
+     * @param mixed $file
+     * @return array
      */
     public function fileToArray($file)
     {
@@ -191,25 +180,23 @@ trait Asset
     }
 
     /**
-     * cuenta cuantas dimensiones tiene un array, devolviendo un valor numerico
-     * correspondiente a la dimension, si no es un array devolvera 0
-     * @param Array $array
-     * @param Int
+     * Check how many dimension has an array
+     * @param mixed $array
+     * @return int
      */
     public function array_count_dimension($array)
     {
         $dimension = 0;
-        //funcion anonima
+
         $count_dimension = function ($array) use (&$dimension, &$count_dimension) {
             if (is_array($array)) {
                 $dimension += 1;
                 foreach ($array as $value) {
                     return $count_dimension($value);
-                    break;
                 }
             }
         };
-        //ejecucion
+
         $count_dimension($array);
 
         return $dimension;

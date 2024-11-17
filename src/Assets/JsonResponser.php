@@ -2,6 +2,7 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -11,10 +12,10 @@ use Illuminate\Support\Facades\Validator;
 trait JsonResponser
 {
     /**
-     * muesta un mensaje en formato JSON
-     * @param String $message
-     * @param Integer $code
-     * @return Json
+     * Return a message in json format
+     * @param mixed $message message
+     * @param mixed $code http status code
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function message($message, $code = 200)
     {
@@ -22,10 +23,10 @@ trait JsonResponser
     }
 
     /**
-     * retorna un Objeto o colleccion de obejtos en formato Json en formato Json
-     * @param \Illuminate\Support\Collection $collection
-     * @param Integer $code
-     * @return Json
+     * Return data in json format 
+     * @param mixed $collection 
+     * @param mixed $code
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function data($collection, $code = 200)
     {
@@ -33,17 +34,15 @@ trait JsonResponser
     }
 
     /**
-     * muestra un objeto de un modelo en formato Json
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @param $transformer
-     * @param Integer $code
-     * @return Json
+     * Show one resource la object in json format
+     * @param mixed $model Model instance
+     * @param mixed $transformer  Model to transform data
+     * @param mixed $code Http status code
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function showOne($model, $transformer = null, $code = 200)
     {
-        //transforma el modelo
         if ($transformer != null && gettype($transformer) != "integer") {
-
             $model = fractal($model, $transformer);
         }
 
@@ -51,24 +50,21 @@ trait JsonResponser
     }
 
     /**
-     * Muestra toda la colleccion en formato Json
-     * @param \Illuminate\Support\Collection $collection
-     * @param $transformer
-     * @param Integer $code
-     * @param Boolean $pagination
-     * @return Json
+     * Show all data from any collection in json 
+     * @param mixed $collection
+     * @param mixed $transformer
+     * @param mixed $code
+     * @param mixed $pagination
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function showAll($collection, $transformer = null, $code = 200, $pagination = true)
     {
-        //ordena los datos
         $collection = $this->orderBy($collection);
 
-        //pagina los datos
         if ($pagination) {
             $collection = $this->paginate($collection);
         }
 
-        //transforma los datos
         if ($transformer != null && gettype($transformer) != "integer") {
             $collection = fractal($collection, $transformer);
         }
@@ -77,40 +73,42 @@ trait JsonResponser
     }
 
     /**
-     * obtiene la claves o attributos de una clase
-     * @param String $table
-     * @return Array
+     * Get the columns name form any table 
+     * @param mixed $table table name
+     * @return array
      */
-    public function collumns_name_table($table)
+    public function columns_name_table($table)
     {
         $columns = Schema::getColumnListing($table);
         return $columns;
     }
 
     /**
-     * pagina la informacion de una colleccion por defecto pagina cada 15 resultado
-     * @param \Illuminate\Support\Collection $collection
-     * @param Integer $perPage
-     * @return \Illuminate\Support\Collection
-     *
-     **/
-    public function paginate($collection, $perPage = 15)
+     * Generate a pagination to the collection
+     * @param mixed $collection
+     * @param mixed $per_page 
+     * @return LengthAwarePaginator
+     */
+    public function paginate($collection, $per_page = 15)
     {
-        $rules = [
-            'per_page' => 'integer|min:2',
-        ];
-
-        Validator::validate(request()->all(), $rules);
+        throw_if(
+            $per_page < 2,
+            Exception::class,
+            __(
+                'The value of :per_page must be at least 2.',
+                ['per_page' => $per_page]
+            )
+        );
 
         $page = LengthAwarePaginator::resolveCurrentPage();
 
         if (request()->has('per_page')) {
-            $perPage = (int) request()->per_page;
+            $per_page = (int) request()->per_page;
         }
 
-        $result = $collection->slice(($page - 1) * $perPage, $perPage)->values();
+        $result = $collection->slice(($page - 1) * $per_page, $per_page)->values();
 
-        $paginated = new LengthAwarePaginator($result, $collection->count(), $perPage, $page, [
+        $paginated = new LengthAwarePaginator($result, $collection->count(), $per_page, $page, [
             'path' => LengthAwarePaginator::resolveCurrentPath(),
         ]);
 
@@ -120,10 +118,10 @@ trait JsonResponser
     }
 
     /**
-     * transforma los parametros ingresados a traves del request y solo devolvera
-     * los parametros que pertenzccan al recurso transformados los cuales filtrara
-     * @param Transformer $transformer
-     * @return Array
+     * Transform the all request using the Transform class for current model
+     * through the method getOriginalAttributes 
+     * @param mixed $transformer
+     * @return array
      */
     public function filter_transform($transformer)
     {
@@ -138,25 +136,24 @@ trait JsonResponser
     }
 
     /**
-     * Obtiene solo pararametros de una tabla los cuales seran usados para filtrar
-     * @param String $table
-     * @return Array
+     * Filter data using the column of the table 
+     * @param mixed $table
+     * @return array
      */
     public function filter($table)
     {
-        return request()->only($this->collumns_name_table($table));
+        return request()->only($this->columns_name_table($table));
     }
 
     /**
-     * realiza la busqueda de data usando LIKE, requiere del modelo y los parametros a filtrar
-     * @param String $table
-     * @param Array $params
-     * Requeridos cuando se desea especificar el usuario de caul se desea obtener la data
-     * @param String $user_field
-     * @param String $user_id
+     * Search values 
+     * @param mixed $table table name of the model
+     * @param array $params params of the model
+     * @param string $user_field name of field in the table
+     * @param string $user_id current user id
      * @return Collection
      */
-    public function search($table, array $params = null, String $user_field = null, String $user_id = null)
+    public function search($table, array $params = null, string $user_field = null, string $user_id = null)
     {
         $sql = "SELECT * FROM {$table}";
         $bindings = [];
@@ -183,19 +180,16 @@ trait JsonResponser
     }
 
     /**
-     * ordena la informacion a partir de una colleccion
-     * @param Collection $collection
+     * Order by collection using params order_by and order_type
+     * @param mixed $collection
      * @return Collection
      */
     public function orderBy($collection)
     {
-        //obtenemos los datos para ordenar
         $order_by = request()->only('order_by');
         $order_type = request()->only('order_type');
 
         if ($order_by) {
-
-            //ordemos los valores
             foreach ($order_by as $key => $value) {
                 if (isset($order_type['order_type']) and strtolower($order_type['order_type']) == "desc") {
                     $collection = $collection->sortByDesc($value);
@@ -206,7 +200,6 @@ trait JsonResponser
 
             $collection->values()->all();
 
-            //retornamos la collection con los datos ordenados
             return collect($collection);
 
         } else {

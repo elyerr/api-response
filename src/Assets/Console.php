@@ -2,13 +2,15 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
+use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Filesystem\Filesystem;
 
 trait Console
 {
+    use Asset;
     /**
-     * instancia de Illuminate\Filesystem\Filesystem
-     * @return \Illuminate\Filesystem\Filesystem
+     * Instance of Filesystem
+     * @return Filesystem
      */
     public function fileSystem()
     {
@@ -16,8 +18,8 @@ trait Console
     }
 
     /**
-     * registra el controlador principal
-     * @return void
+     * Register controllers in the kernel file
+     * @return bool
      */
     public function registerController()
     {
@@ -37,26 +39,24 @@ trait Console
     }
 
     /**
-     * Añade rutas
-     *
-     * @param Array  $routes
-     * @param String $file
-     * @param Array $imports
+     * Add routes
+     * @param array $routes
+     * @param string $file
+     * @param array $imports
      * @return void
      */
     protected function addRoutes(array $routes, $file, array $imports)
     {
         foreach ($imports as $import) {
-            $this->addString(base_path($file), 3, "use {$import};\n");
+            $path = base_path($file);
+            $route = "use $import;\n";
+            $this->addString($path, 3, $route);
         }
 
-        // Lee el contenido actual del archivo
         $currentContent = file_get_contents(base_path($file));
 
         foreach ($routes as $route) {
-            // Verifica si la ruta ya existe en el archivo
             if (strpos($currentContent, $route) === false) {
-                // La ruta no existe, agrégala al archivo
                 file_put_contents(base_path($file), "\n{$route};", FILE_APPEND);
             }
         }
