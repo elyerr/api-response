@@ -243,6 +243,16 @@ This trait can be implemented in a model to bypass transformers when formatting 
     public function array_count_dimension($array)
 ```
 
+```php
+ /**
+    * checking method
+    * @param mixed $method
+    * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
+    * @return void
+    */
+    public function checkMethod($method)
+```
+
 ## Functionality of transformers
 
 To create a transformer, use the command `php artisan make:transformer UserTransformer`. You can refer to the [official documentation](https://github.com/spatie/laravel-fractal) for more details.

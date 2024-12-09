@@ -2,11 +2,12 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
-use DateInvalidTimeZoneException;
 use DateTime;
+use Exception;
 use DateTimeZone;
 use ErrorException;
-use Exception;
+use DateInvalidTimeZoneException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 /**
  *
@@ -200,5 +201,22 @@ trait Asset
         $count_dimension($array);
 
         return $dimension;
+    }
+
+    /**
+    * checking method
+    * @param mixed $method
+    * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
+    * @return void
+    */
+    public function checkMethod($method)
+    {
+        if (request()->method() !== strtoupper($method)) {
+            throw new MethodNotAllowedException(
+                ["Expected method: $method"],
+                "Method not allowed",
+                405
+            );
+        }
     }
 }
