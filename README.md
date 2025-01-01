@@ -253,6 +253,25 @@ This trait can be implemented in a model to bypass transformers when formatting 
     public function checkMethod($method)
 ```
 
+```php
+ /**
+    * Get the content type for current request
+    * @return array|string|null
+    */
+    public function getContentType()
+```
+
+```php
+/**
+     * Checking the content type 
+     * @param mixed $content_type
+     * @param array $symbols
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     * @return void
+     */
+    public function checkContentType($content_type, array $symbols = ['?', '='])
+```
+
 ## Functionality of transformers
 
 To create a transformer, use the command `php artisan make:transformer UserTransformer`. You can refer to the [official documentation](https://github.com/spatie/laravel-fractal) for more details.
