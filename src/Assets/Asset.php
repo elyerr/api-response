@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use DateTimeZone;
 use ErrorException;
+use Illuminate\Support\Str;
 use DateInvalidTimeZoneException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -258,6 +259,45 @@ trait Asset
                 "Content type not allowed: $content_type"
             );
         }
+    }
 
+    /**
+     * Get the header for post method
+     * @return string
+     */
+    public function getPostHeader()
+    {
+        return "multipart/form-data";
+    }
+
+    /**
+     * Get header for put method
+     * @return string
+     */
+    public function getUpdateHeader()
+    {
+        return "application/x-www-form-urlencoded";
+    }
+
+    /**
+     * Create a standard slug
+     * @param mixed $value
+     * @return mixed
+     */
+    public function slug($value, $separator = "_")
+    {
+        return Str::slug($value, $separator);
+    }
+
+    /**
+     * Covert to upper case to lower case
+     * @param mixed $value
+     * @return string
+     */
+    public function toKebabCase($value)
+    {
+        $result = preg_replace('/(?<!^)([A-Z])/', '-$1', $value);
+
+        return strtolower($result);
     }
 }

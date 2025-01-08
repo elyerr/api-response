@@ -263,13 +263,47 @@ This trait can be implemented in a model to bypass transformers when formatting 
 
 ```php
 /**
-     * Checking the content type 
+     * Checking the content type
      * @param mixed $content_type
      * @param array $symbols
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      * @return void
      */
     public function checkContentType($content_type, array $symbols = ['?', '='])
+```
+
+```php
+ /**
+     * Get the header for post method
+     * @return string
+     */
+    public function getPostHeader()
+```
+
+```php
+/**
+     * Get header for put method
+     * @return string
+     */
+    public function getUpdateHeader()
+```
+
+```php
+/**
+     * Create a standard slug
+     * @param mixed $value
+     * @return mixed
+     */
+    public function slug($value, $separator = "_")
+```
+
+```php
+/**
+     * Covert to upper case to lower case
+     * @param mixed $value
+     * @return string
+     */
+    public function toKebabCase($value)
 ```
 
 ## Functionality of transformers
@@ -280,7 +314,7 @@ To create a transformer, use the command `php artisan make:transformer UserTrans
 
     /**
      * Transform a collection data to output information to the user
-     * 
+     *
      */
     public function transform($data)
     {
@@ -306,7 +340,7 @@ To create a transformer, use the command `php artisan make:transformer UserTrans
     }
 
     /**
-     * Transform response 
+     * Transform response
      * @param string $index
      * @return string|null
      */
@@ -319,10 +353,10 @@ To create a transformer, use the command `php artisan make:transformer UserTrans
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
     }
-      
+
     /**
      * Set the attributes to transform filters
-     * 
+     *
      * @param string $index
      * @return string|null
      */
@@ -337,8 +371,6 @@ To create a transformer, use the command `php artisan make:transformer UserTrans
     }
 ```
 
- 
-
 # Apply middleware into the controller
 
 ```php
@@ -346,4 +378,3 @@ To create a transformer, use the command `php artisan make:transformer UserTrans
       $this->middleware('transform.request:' . $model->transformer)
   }
 ```
- 

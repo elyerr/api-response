@@ -2,12 +2,13 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
-use Elyerr\ApiResponse\Exceptions\ReportError;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 trait JsonResponser
 {
@@ -146,37 +147,16 @@ trait JsonResponser
     }
 
     /**
-     * Search values 
-     * @param mixed $table table name of the model
-     * @param array $params params of the model
-     * @param string $user_field name of field in the table
-     * @param string $user_id current user id
-     * @return Collection
+     * Searcher values
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $params
+     * @return void
      */
-    public function search($table, array $params = null, string $user_field = null, string $user_id = null)
+    public function search(Builder $query, array $params)
     {
-        $sql = "SELECT * FROM {$table}";
-        $bindings = [];
-
-        if ($user_field && $user_id) {
-            $sql .= " WHERE {$user_field} = ?";
-            $bindings[] = $user_id;
+        foreach ($params as $key => $value) {
+            $query = $query->where($key, "like", "%" . $value . "%");
         }
-
-        if ($params) {
-            foreach ($params as $key => $value) {
-                if (empty($bindings)) {
-                    $sql .= " WHERE {$key} LIKE ?";
-                } else {
-                    $sql .= " AND {$key} LIKE ?";
-                }
-                $bindings[] = "%{$value}%";
-            }
-        }
-
-        $results = DB::select($sql, $bindings);
-
-        return collect($results);
     }
 
     /**

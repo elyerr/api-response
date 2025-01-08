@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-  
+
 use Illuminate\Routing\Controller;
 use Elyerr\ApiResponse\Assets\Asset;
 use Elyerr\ApiResponse\Assets\JsonResponser;

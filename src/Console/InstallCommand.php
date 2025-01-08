@@ -30,13 +30,13 @@ class InstallCommand extends Command
 
         //$this->requireComposerPackages(['spatie/laravel-fractal']);
 
-        $this->installStubs();
+        //$this->installStubs();
         $this->models();
         $this->registerController();
-        $this->addMiddleware();
-        $this->addEnvironmentKeys();
-        $this->broadcastingActivate();
-        $this->registerChannels();
+        //$this->addMiddleware();
+        //$this->addEnvironmentKeys();
+        //$this->broadcastingActivate();
+        //$this->registerChannels();
 
         $this->info('Api Response installed successfully');
 
