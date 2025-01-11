@@ -300,4 +300,13 @@ trait Asset
 
         return strtolower($result);
     }
+
+    /**
+     * Get header for json request
+     * @return string
+     */
+    public function getJsonHeader()
+    {
+        return "application/json";
+    }
 }

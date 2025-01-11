@@ -136,10 +136,6 @@ By default, this functionality is added to the GlobalController. To use it, you 
     public function orderBy($collection)
 ```
 
-## Functionality of Timestamps
-
-This trait can be implemented in a model to bypass transformers when formatting dates. Dates will automatically be formatted in the `YEAR-MONTH-DAY H:I` format, for example, `2023-12-01 15:30`.
-
 ## Functionality de Asset
 
 ```php
@@ -305,6 +301,15 @@ This trait can be implemented in a model to bypass transformers when formatting 
      */
     public function toKebabCase($value)
 ```
+
+```php
+/**
+     * Get header for json request
+     * @return string
+     */
+    public function getJsonHeader()
+```
+
 
 ## Functionality of transformers
 
