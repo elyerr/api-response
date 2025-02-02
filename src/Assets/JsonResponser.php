@@ -2,12 +2,10 @@
 
 namespace Elyerr\ApiResponse\Assets;
 
+use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Validator;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 trait JsonResponser
@@ -60,8 +58,6 @@ trait JsonResponser
      */
     public function showAll($collection, $transformer = null, $code = 200, $pagination = true)
     {
-        $collection = $this->orderBy($collection);
-
         if ($pagination) {
             $collection = $this->paginate($collection);
         }
@@ -161,30 +157,16 @@ trait JsonResponser
 
     /**
      * Order by collection using params order_by and order_type
-     * @param mixed $collection
-     * @return Collection
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return void
      */
-    public function orderBy($collection)
+    public function orderBy(Builder $builder)
     {
-        $order_by = request()->only('order_by');
-        $order_type = request()->only('order_type');
+        $order_by = request()->order_by;
+        $order_type = request()->order_type ?? 'asc';
 
         if ($order_by) {
-            foreach ($order_by as $key => $value) {
-                if (isset($order_type['order_type']) and strtolower($order_type['order_type']) == "desc") {
-                    $collection = $collection->sortByDesc($value);
-                } else {
-                    $collection = $collection->sortBy($value);
-                }
-            }
-
-            $collection->values()->all();
-
-            return collect($collection);
-
-        } else {
-            $sorted = $collection->sortDesc()->values()->all();
-            return collect($sorted);
+            $builder->orderBy($order_by, $order_type);
         }
     }
 }

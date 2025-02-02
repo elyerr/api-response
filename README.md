@@ -128,12 +128,12 @@ By default, this functionality is added to the GlobalController. To use it, you 
 
 ```php
 
-    /**
+   /**
      * Order by collection using params order_by and order_type
-     * @param mixed $collection
-     * @return Collection
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return void
      */
-    public function orderBy($collection)
+    public function orderResults(Builder $builder)
 ```
 
 ## Functionality de Asset
