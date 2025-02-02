@@ -131,9 +131,10 @@ By default, this functionality is added to the GlobalController. To use it, you 
    /**
      * Order by collection using params order_by and order_type
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param mixed $transformer
      * @return void
      */
-    public function orderResults(Builder $builder)
+    public function orderBy(Builder $builder, $transformer = null)
 ```
 
 ## Functionality de Asset
@@ -309,7 +310,6 @@ By default, this functionality is added to the GlobalController. To use it, you 
      */
     public function getJsonHeader()
 ```
-
 
 ## Functionality of transformers
 

@@ -158,12 +158,22 @@ trait JsonResponser
     /**
      * Order by collection using params order_by and order_type
      * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param mixed $transformer
      * @return void
      */
-    public function orderBy(Builder $builder)
+    public function orderBy(Builder $builder, $transformer = null)
     {
         $order_by = request()->order_by;
         $order_type = request()->order_type ?? 'asc';
+
+        if ($transformer) {
+            $order_by = $transformer::getOriginalAttributes($order_by);
+        } else {
+            $columns = $builder->getQuery()->getConnection()->getSchemaBuilder()->getColumnListing($builder->getQuery()->from);
+            if (!in_array($order_by, $columns)) {
+                $order_by = null;
+            }
+        }
 
         if ($order_by) {
             $builder->orderBy($order_by, $order_type);
