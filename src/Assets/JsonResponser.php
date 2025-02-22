@@ -56,7 +56,7 @@ trait JsonResponser
      * @param mixed $pagination
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function showAll(Builder $builder, $transformer = null, $code = 200, $pagination = true)
+    public function showAllByBuilder(Builder $builder, $transformer = null, $code = 200, $pagination = true)
     {
         $collection = [];
         $per_page = (int) request()->has('per_page') ? request()->get('per_page') : 10;
@@ -73,6 +73,32 @@ trait JsonResponser
 
         return $this->data($collection, $code);
     }
+
+
+    /**
+     * Show all data from any collection in json 
+     * @param mixed $collection
+     * @param mixed $transformer
+     * @param mixed $code
+     * @param mixed $pagination
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
+    public function showAll($collection, $transformer = null, $code = 200, $pagination = true)
+    {
+        $collection = $this->orderBy($collection);
+
+        if ($pagination) {
+            $collection = $this->paginate($collection);
+        }
+
+        if ($transformer != null && gettype($transformer) != "integer") {
+            $collection = fractal($collection, $transformer);
+        }
+
+        return $this->data($collection, $code);
+    }
+
+
 
     /**
      * Get the columns name form any table 
@@ -153,7 +179,7 @@ trait JsonResponser
      * @param array $params
      * @return Builder
      */
-    public function search(Builder $query, array $params)
+    public function searchByBuilder(Builder $query, array $params)
     {
         foreach ($params as $key => $value) {
             if (empty($value)) {
@@ -172,7 +198,7 @@ trait JsonResponser
      * @param mixed $transformer
      * @return Builder
      */
-    public function orderBy(Builder $builder, $transformer = null)
+    public function orderByBuilder(Builder $builder, $transformer = null)
     {
         $order_by = request()->order_by;
         $order_type = request()->order_type ?? 'asc';
@@ -201,4 +227,36 @@ trait JsonResponser
 
         return $builder;
     }
+
+
+
+    /**
+     * Order by collection using params order_by and order_type
+     * @param mixed $collection
+     * @return Collection
+     */
+    public function orderBy($collection)
+    {
+        $order_by = request()->only('order_by');
+        $order_type = request()->only('order_type');
+
+        if ($order_by) {
+            foreach ($order_by as $key => $value) {
+                if (isset($order_type['order_type']) and strtolower($order_type['order_type']) == "desc") {
+                    $collection = $collection->sortByDesc($value);
+                } else {
+                    $collection = $collection->sortBy($value);
+                }
+            }
+
+            $collection->values()->all();
+
+            return collect($collection);
+
+        } else {
+            $sorted = $collection->sortDesc()->values()->all();
+            return collect($sorted);
+        }
+    }
+
 }
