@@ -56,10 +56,15 @@ trait JsonResponser
      * @param mixed $pagination
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function showAll($collection, $transformer = null, $code = 200, $pagination = true)
+    public function showAll(Builder $builder, $transformer = null, $code = 200, $pagination = true)
     {
+        $collection = [];
+        $per_page = (int) request()->has('per_page') ? request()->get('per_page') : 10;
+
         if ($pagination) {
-            $collection = $this->paginate($collection);
+            $collection = $builder->paginate($per_page);
+        } else {
+            $collection = $builder->get();
         }
 
         if ($transformer != null && gettype($transformer) != "integer") {
@@ -146,30 +151,43 @@ trait JsonResponser
      * Searcher values
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array $params
-     * @return void
+     * @return Builder
      */
     public function search(Builder $query, array $params)
     {
         foreach ($params as $key => $value) {
-            $query = $query->where($key, "like", "%" . $value . "%");
+            if (empty($value)) {
+                continue;
+            }
+
+            $query = $query->where($key, "like", "%" . e($value) . "%");
         }
+
+        return $query;
     }
 
     /**
      * Order by collection using params order_by and order_type
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @param mixed $transformer
-     * @return void
+     * @return Builder
      */
     public function orderBy(Builder $builder, $transformer = null)
     {
         $order_by = request()->order_by;
         $order_type = request()->order_type ?? 'asc';
 
+        if (!in_array(strtolower($order_type), ['asc', 'desc'])) {
+            $order_type = 'asc';
+        }
+
         if ($transformer) {
-            $order_by = $transformer::getOriginalAttributes($order_by);
+            if (method_exists($transformer, 'getOriginalAttributes') && $order_by) {
+                $order_by = $transformer::getOriginalAttributes($order_by);
+            }
         } else {
             $columns = $builder->getQuery()->getConnection()->getSchemaBuilder()->getColumnListing($builder->getQuery()->from);
+
             if (!in_array($order_by, $columns)) {
                 $order_by = null;
             }
@@ -177,6 +195,10 @@ trait JsonResponser
 
         if ($order_by) {
             $builder->orderBy($order_by, $order_type);
+        } else {
+            $builder->orderBy('id', $order_type);
         }
+
+        return $builder;
     }
 }
