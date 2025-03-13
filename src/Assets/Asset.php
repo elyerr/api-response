@@ -309,4 +309,28 @@ trait Asset
     {
         return "application/json";
     }
+
+
+    /**
+     * Convert the request into key names used for settings
+     * @param array $data
+     * @param string $prefix
+     * @return array
+     */
+    public function transformRequest(array $data, string $prefix = '')
+    {
+        $flattened = [];
+
+        foreach ($data as $key => $value) {
+            $newKey = $prefix ? "{$prefix}.{$key}" : $key;
+
+            if (is_array($value)) {
+                $flattened += $this->transformRequest($value, $newKey);
+            } else {
+                $flattened[$newKey] = $value;
+            }
+        }
+
+        return $flattened;
+    }
 }

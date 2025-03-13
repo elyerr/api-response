@@ -311,6 +311,16 @@ By default, this functionality is added to the GlobalController. To use it, you 
     public function getJsonHeader()
 ```
 
+```php
+ /**
+     * Convert the request into key names used for settings
+     * @param array $data
+     * @param string $prefix
+     * @return array
+     */
+    public function transformRequest(array $data, string $prefix = '') 
+```
+
 ## Functionality of transformers
 
 To create a transformer, use the command `php artisan make:transformer UserTransformer`. You can refer to the [official documentation](https://github.com/spatie/laravel-fractal) for more details.
