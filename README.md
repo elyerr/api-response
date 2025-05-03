@@ -318,7 +318,18 @@ By default, this functionality is added to the GlobalController. To use it, you 
      * @param string $prefix
      * @return array
      */
-    public function transformRequest(array $data, string $prefix = '') 
+    public function transformRequest(array $data, string $prefix = '')
+```
+
+```php
+/**
+     * Format money
+     * @param mixed $date
+     * @param mixed $decimal_separator
+     * @param mixed $thousands
+     * @return string
+     */
+    public function formatMoney($date, $decimal_separator = ".", $thousands = ",")
 ```
 
 ## Functionality of transformers

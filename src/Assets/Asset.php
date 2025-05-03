@@ -333,4 +333,16 @@ trait Asset
 
         return $flattened;
     }
+
+    /**
+     * Format money
+     * @param mixed $date
+     * @param mixed $decimal_separator
+     * @param mixed $thousands
+     * @return string
+     */
+    public function formatMoney($date, $decimal_separator = ".", $thousands = ",")
+    {
+        return number_format($date / 100, 2, $decimal_separator, $thousands);
+    }
 }
