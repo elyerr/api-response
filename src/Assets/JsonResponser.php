@@ -182,11 +182,11 @@ trait JsonResponser
     public function searchByBuilder(Builder $query, array $params)
     {
         foreach ($params as $key => $value) {
-            if (empty($value)) {
+            if (!isset($value) || trim($value) === '') {
                 continue;
             }
 
-            $query = $query->where($key, "like", "%" . e($value) . "%");
+            $query->whereRaw("LOWER({$key}) LIKE ?", ['%' . strtolower($value) . '%']);
         }
 
         return $query;
@@ -201,7 +201,7 @@ trait JsonResponser
     public function orderByBuilder(Builder $builder, $transformer = null)
     {
         $order_by = request()->order_by;
-        $order_type = request()->order_type ?? 'asc';
+        $order_type = request()->order_type ?? 'desc';
 
         if (!in_array(strtolower($order_type), ['asc', 'desc'])) {
             $order_type = 'asc';
@@ -227,8 +227,6 @@ trait JsonResponser
 
         return $builder;
     }
-
-
 
     /**
      * Order by collection using params order_by and order_type
