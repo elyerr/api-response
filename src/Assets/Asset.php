@@ -206,80 +206,6 @@ trait Asset
     }
 
     /**
-     * checking method
-     * @param mixed $method
-     * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
-     * @return void
-     */
-    public function checkMethod($method)
-    {
-        if (request()->method() !== strtoupper($method)) {
-            throw new MethodNotAllowedException(
-                ["Expected method: $method"],
-                "Method not allowed",
-                405
-            );
-        }
-    }
-
-    /**
-     * Get the content type for current request
-     * @return array|string|null
-     */
-    public function getContentType()
-    {
-        $header = request()->header('content-type');
-        if (str_contains($header, ";")) {
-            $header = explode(';', $header)[0];
-        }
-
-        return $header;
-    }
-
-
-    /**
-     * Checking the content type 
-     * @param mixed $content_type
-     * @param array $symbols
-     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @return void
-     */
-    public function checkContentType($content_type, array $symbols = ['?', '='])
-    {
-        foreach ($symbols as $sym) {
-            if (str_contains(request()->getRequestUri(), $sym)) {
-                throw new BadRequestHttpException(
-                    "Request violated: Query parameters are not permitted in the URL."
-                );
-            }
-        }
-
-        if ($this->getContentType() != $content_type) {
-            throw new BadRequestHttpException(
-                "Content type not allowed: $content_type"
-            );
-        }
-    }
-
-    /**
-     * Get the header for post method
-     * @return string
-     */
-    public function getPostHeader()
-    {
-        return "multipart/form-data";
-    }
-
-    /**
-     * Get header for put method
-     * @return string
-     */
-    public function getUpdateHeader()
-    {
-        return "application/x-www-form-urlencoded";
-    }
-
-    /**
      * Create a standard slug
      * @param mixed $value
      * @return mixed
@@ -300,16 +226,6 @@ trait Asset
 
         return strtolower($result);
     }
-
-    /**
-     * Get header for json request
-     * @return string
-     */
-    public function getJsonHeader()
-    {
-        return "application/json";
-    }
-
 
     /**
      * Convert the request into key names used for settings
