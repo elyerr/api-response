@@ -241,51 +241,6 @@ By default, this functionality is added to the GlobalController. To use it, you 
 ```
 
 ```php
- /**
-    * checking method
-    * @param mixed $method
-    * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
-    * @return void
-    */
-    public function checkMethod($method)
-```
-
-```php
- /**
-    * Get the content type for current request
-    * @return array|string|null
-    */
-    public function getContentType()
-```
-
-```php
-/**
-     * Checking the content type
-     * @param mixed $content_type
-     * @param array $symbols
-     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @return void
-     */
-    public function checkContentType($content_type, array $symbols = ['?', '='])
-```
-
-```php
- /**
-     * Get the header for post method
-     * @return string
-     */
-    public function getPostHeader()
-```
-
-```php
-/**
-     * Get header for put method
-     * @return string
-     */
-    public function getUpdateHeader()
-```
-
-```php
 /**
      * Create a standard slug
      * @param mixed $value
@@ -301,14 +256,6 @@ By default, this functionality is added to the GlobalController. To use it, you 
      * @return string
      */
     public function toKebabCase($value)
-```
-
-```php
-/**
-     * Get header for json request
-     * @return string
-     */
-    public function getJsonHeader()
 ```
 
 ```php
