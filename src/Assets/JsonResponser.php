@@ -22,8 +22,8 @@ trait JsonResponser
     }
 
     /**
-     * Return data in json format 
-     * @param mixed $collection 
+     * Return data in json format
+     * @param mixed $collection
      * @param mixed $code
      * @return mixed|\Illuminate\Http\JsonResponse
      */
@@ -49,7 +49,7 @@ trait JsonResponser
     }
 
     /**
-     * Show all data from any collection in json 
+     * Show all data from any collection in json
      * @param mixed $collection
      * @param mixed $transformer
      * @param mixed $code
@@ -59,7 +59,7 @@ trait JsonResponser
     public function showAllByBuilder(Builder $builder, $transformer = null, $code = 200, $pagination = true)
     {
         $collection = [];
-        $per_page = (int) request()->has('per_page') ? request()->get('per_page') : 10;
+        $per_page = (int) request()->has('per_page') ? request()->get('per_page') : 50;
 
         if ($pagination) {
             $collection = $builder->paginate($per_page);
@@ -76,7 +76,7 @@ trait JsonResponser
 
 
     /**
-     * Show all data from any collection in json 
+     * Show all data from any collection in json
      * @param mixed $collection
      * @param mixed $transformer
      * @param mixed $code
@@ -101,7 +101,7 @@ trait JsonResponser
 
 
     /**
-     * Get the columns name form any table 
+     * Get the columns name form any table
      * @param mixed $table table name
      * @return array
      */
@@ -114,7 +114,7 @@ trait JsonResponser
     /**
      * Generate a pagination to the collection
      * @param mixed $collection
-     * @param mixed $per_page 
+     * @param mixed $per_page
      * @return LengthAwarePaginator
      */
     public function paginate($collection, $per_page = 15)
@@ -147,7 +147,7 @@ trait JsonResponser
 
     /**
      * Transform the all request using the Transform class for current model
-     * through the method getOriginalAttributes 
+     * through the method getOriginalAttributes
      * @param mixed $transformer
      * @return array
      */
@@ -164,7 +164,7 @@ trait JsonResponser
     }
 
     /**
-     * Filter data using the column of the table 
+     * Filter data using the column of the table
      * @param mixed $table
      * @return array
      */

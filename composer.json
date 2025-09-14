@@ -1,6 +1,6 @@
 {
     "name": "elyerr/api-response",
-    "description": "Add news functionalities into the Laravel Framework",
+    "description": "Add news functionalities for oauth2 passport server",
     "type": "library",
     "license": "AGPL-3.0-only",
     "extra": {
@@ -17,7 +17,7 @@
     },
     "authors": [
         {
-            "name": "Elvis  Yerel Roman Concha",
+            "name": "Elvis Yerel Roman Concha",
             "email": "yerel9212@yahoo.es"
         }
     ],
@@ -33,7 +33,7 @@
     },
     "require-dev": {
         "php": "^8.0.2",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^10.0",
         "phpunit/phpunit": "^10.4"
     }
 }

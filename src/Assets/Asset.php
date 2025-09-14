@@ -8,8 +8,6 @@ use DateTimeZone;
 use ErrorException;
 use Illuminate\Support\Str;
 use DateInvalidTimeZoneException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  *
@@ -210,7 +208,7 @@ trait Asset
      * @param mixed $value
      * @return mixed
      */
-    public function slug($value, $separator = "_")
+    public function slug($value, $separator = "-")
     {
         return Str::slug($value, $separator);
     }
