@@ -120,20 +120,7 @@ trait Asset
         return strtotime(now()) >= strtotime($in) and strtotime(now()) < strtotime($out);
     }
 
-    /**
-     * Change key in the transformer model, this work in this functions (transformRequest y transformResponse)
-     * @param mixed $index
-     * @return array|String|string
-     */
-    public static function changeIndex($index)
-    {
-        try {
-            $number = explode(".", $index)[1];
-            return str_replace($number, '*', $index);
-        } catch (ErrorException $e) {
-            return $index;
-        }
-    }
+
 
     /**
      * Add new string into a file
