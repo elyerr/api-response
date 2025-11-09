@@ -58,6 +58,6 @@ class ReportError extends Exception
             return $this->message($this->message, $this->code);
         }
 
-        throw new Exception(__($this->message), $this->code);
+        abort($this->code, $this->message);
     }
 }
