@@ -42,7 +42,7 @@ trait JsonResponser
     public function showOne($model, $transformer = null, $code = 200)
     {
         if ($transformer != null && gettype($transformer) != "integer") {
-            $model = fractal($model, $transformer);
+            $model = fractal($model, $transformer)->toArray()['data'] ?? [];
         }
 
         return $this->data($model, $code);
