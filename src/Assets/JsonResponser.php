@@ -61,6 +61,10 @@ trait JsonResponser
         $collection = [];
         $per_page = (int) request()->has('per_page') ? request()->get('per_page') : 50;
 
+        if ($per_page > 500) {
+            $per_page = 500;
+        }
+
         if ($pagination) {
             $collection = $builder->paginate($per_page);
         } else {
@@ -132,6 +136,10 @@ trait JsonResponser
 
         if (request()->has('per_page')) {
             $per_page = (int) request()->per_page;
+        }
+
+        if ($per_page > 500) {
+            $per_page = 500;
         }
 
         $result = $collection->slice(($page - 1) * $per_page, $per_page)->values();
