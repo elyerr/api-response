@@ -2,6 +2,7 @@
     "name": "elyerr/api-response",
     "description": "Add news functionalities for oauth2 passport server",
     "type": "library",
+    "version": "v1.0.28",
     "license": "AGPL-3.0-only",
     "extra": {
         "laravel": {
