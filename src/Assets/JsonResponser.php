@@ -72,6 +72,10 @@ trait JsonResponser
             $collection = $builder->get();
         }
 
+        if ($collection->count() == 0) {
+            $code = 204;
+        }
+
         if ($transformer != null && gettype($transformer) != "integer") {
             $collection = fractal($collection, $transformer);
         }
@@ -92,6 +96,10 @@ trait JsonResponser
     {
         $collection = $this->orderBy($collection);
 
+        if ($collection->count() == 0) {
+            $code = 204;
+        }
+
         if ($pagination) {
             $collection = $this->paginate($collection);
         }
@@ -99,6 +107,7 @@ trait JsonResponser
         if ($transformer != null && gettype($transformer) != "integer") {
             $collection = fractal($collection, $transformer);
         }
+
 
         return $this->data($collection, $code);
     }
