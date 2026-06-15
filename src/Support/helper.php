@@ -159,3 +159,35 @@ if (!function_exists('array_count_dimension')) {
         return $dimension;
     }
 }
+
+
+if (!function_exists('normalizeMoneyToCents')) {
+
+    /**
+     * Normalize Money to cents 
+     * @param string $price
+     * @return int
+     */
+    function normalizeMoneyToCents(string $price): string
+    {
+        $price = trim($price);
+
+        $price = str_replace(' ', '', $price);
+
+        if (substr_count($price, ',') === 1 && substr_count($price, '.') === 0) {
+            $price = str_replace(',', '.', $price);
+        }
+
+        $price = str_replace(',', '', $price);
+
+        if (strpos($price, '.') !== false) {
+            [$integer, $decimal] = explode('.', $price, 2);
+
+            $decimal = str_pad(substr($decimal, 0, 2), 2, '0');
+
+            return (int) ($integer . $decimal);
+        }
+
+        return (int) ($price . '00');
+    }
+}
