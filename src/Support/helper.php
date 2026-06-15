@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 if (!function_exists("generateRandomString")) {
@@ -116,6 +116,12 @@ if (!function_exists('verify_time_is_between')) {
 }
 
 if (!function_exists('transformRequest')) {
+    /**
+     * Transform request with transformer
+     * @param array $data
+     * @param string $prefix
+     * @return array
+     */
     function transformRequest(array $data, string $prefix = '')
     {
         $flattened = [];
