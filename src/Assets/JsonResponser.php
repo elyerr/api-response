@@ -49,8 +49,8 @@ trait JsonResponser
     }
 
     /**
-     * Show all data from any collection in json
-     * @param mixed $collection
+     * Show all data using query builder
+     * @param Builder $builder
      * @param mixed $transformer
      * @param mixed $code
      * @param mixed $pagination
@@ -59,7 +59,8 @@ trait JsonResponser
     public function showAllByBuilder(Builder $builder, $transformer = null, $code = 200, $pagination = true)
     {
         $collection = [];
-        $per_page = (int) request()->has('per_page') ? request()->get('per_page') : 50;
+
+        $per_page = (int) request()->input('per_page', 50);
 
         if ($per_page > 500) {
             $per_page = 500;
@@ -101,8 +102,6 @@ trait JsonResponser
 
         return $this->data($collection, $code);
     }
-
-
 
     /**
      * Get the columns name form any table
