@@ -1,40 +1,43 @@
 {
-    "name": "elyerr/api-response",
-    "description": "Add news functionalities for oauth2 passport server",
-    "type": "library",
-    "version": "v1.0.28",
-    "license": "AGPL-3.0-only",
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Elyerr\\ApiResponse\\ServiceProvider"
-            ]
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Elyerr\\ApiResponse\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Elvis Yerel Roman Concha",
-            "email": "yerel9212@yahoo.es"
-        }
-    ],
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "require": {
-        "spatie/laravel-fractal": "^6.0"
-    },
-    "require-dev": {
-        "php": "^8.0.2",
-        "laravel/framework": "^10.0",
-        "phpunit/phpunit": "^10.4"
+  "name": "elyerr/api-response",
+  "description": "Add news functionalities for oauth2 passport server",
+  "type": "library",
+  "version": "v1.0.28",
+  "license": "AGPL-3.0-only",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Elyerr\\ApiResponse\\ServiceProvider"
+      ]
     }
+  },
+  "autoload": {
+    "psr-4": {
+      "Elyerr\\ApiResponse\\": "src/"
+    },
+    "files": [
+      "src/Support/helper.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Elvis Yerel Roman Concha",
+      "email": "yerel9212@yahoo.es"
+    }
+  ],
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "require": {
+    "spatie/laravel-fractal": "^6.0"
+  },
+  "require-dev": {
+    "php": "^8.0.2",
+    "laravel/framework": "^10.0",
+    "phpunit/phpunit": "^10.4"
+  }
 }
