@@ -1,0 +1,65 @@
+<?php
+
+namespace DummyNamespace;
+
+use League\Fractal\TransformerAbstract;
+
+class DummyClass extends TransformerAbstract
+{
+    /**
+     * List of resources to automatically include
+     *
+     * @var array
+     */
+    protected array $defaultIncludes = [
+        //
+    ];
+    
+    /**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected array $availableIncludes = [
+        //
+    ];
+    
+    /**
+     * A Fractal transformer.
+     *
+     * @return array
+     */
+    public function transform()
+    {
+        return [
+            //
+        ];
+    }
+
+
+    /**
+     * Transform a filter attribute into its original database column.
+     *
+     * This method is commonly used when processing API filters,
+     * sorting parameters, or query string attributes. It maps
+     * public-facing field names to their corresponding database
+     * column names, providing an abstraction layer between the API
+     * and the underlying data source.
+     *
+     * Returns null when the attribute is not allowed or does not exist.
+     *
+     * @param string $index Filter or API attribute name.
+     * @return string|null Original database column name or null if not found.
+     */
+    public static function getOriginalAttributes($index)
+    {
+        $attributes = [
+            "identifier" => "id", 
+            "nombre" => "name",
+            "created" => "created_at",
+            "updated" => "updated_at",
+        ];
+
+        return isset($attributes[$index]) ? $attributes[$index] : null;
+    }
+}
