@@ -2,10 +2,9 @@
 
 namespace Elyerr\ApiResponse;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider as Provider;
 
-final class ServiceProvider extends Provider implements DeferrableProvider
+final class ServiceProvider extends Provider
 {
     /**
      * Bootstrap the application services.
@@ -14,9 +13,12 @@ final class ServiceProvider extends Provider implements DeferrableProvider
      */
     public function boot(): void
     {
-        $this->commands([
-            Console\InstallCommand::class,
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\InstallCommand::class,
+                Console\TransformerCommand::class,
+            ]);
+        }
     }
 
     /**
@@ -26,19 +28,9 @@ final class ServiceProvider extends Provider implements DeferrableProvider
      */
     public function register(): void
     {
-
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
+        $this->commands([
             Console\InstallCommand::class,
-        ];
+            Console\TransformerCommand::class,
+        ]);
     }
-
 }
