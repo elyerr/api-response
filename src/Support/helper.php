@@ -115,7 +115,7 @@ if (!function_exists('verify_time_is_between')) {
     }
 }
 
-if (!function_exists('transformRequest')) {
+if (!function_exists('transformConfigRequest')) {
     /**
      * Transform request for config inputs
      * @param array $data
