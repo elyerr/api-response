@@ -22,7 +22,9 @@
   "authors": [
     {
       "name": "Elvis Yerel Roman Concha",
-      "email": "yerel9212@yahoo.es"
+      "email": "yerel9212@yahoo.es",
+      "role": "owner",
+      "homepage": "https://github.com/elyerrlabs"
     }
   ],
   "autoload-dev": {
