@@ -117,12 +117,12 @@ if (!function_exists('verify_time_is_between')) {
 
 if (!function_exists('transformRequest')) {
     /**
-     * Transform request with transformer
+     * Transform request for config inputs
      * @param array $data
      * @param string $prefix
      * @return array
      */
-    function transformRequest(array $data, string $prefix = '')
+    function transformConfigRequest(array $data, string $prefix = '')
     {
         $flattened = [];
 
@@ -130,7 +130,7 @@ if (!function_exists('transformRequest')) {
             $newKey = $prefix ? "{$prefix}.{$key}" : $key;
 
             if (is_array($value)) {
-                $flattened += transformRequest($value, $newKey);
+                $flattened += transformConfigRequest($value, $newKey);
             } else {
                 $flattened[$newKey] = $value;
             }
@@ -195,5 +195,40 @@ if (!function_exists('normalizeMoneyToCents')) {
         }
 
         return (int) ($price . '00');
+    }
+}
+
+
+if (!function_exists('transformModel')) {
+
+    /**
+     * Transform model data
+     * @param mixed $data
+     * @param mixed $transformer
+     */
+    function transformModel($data, $transformer)
+    {
+        return fractal(
+            $data,
+            $transformer
+        )->toArray()['data'] ?? [];
+    }
+}
+
+
+if (!function_exists('transformCollection')) {
+
+    /**
+     * Transform collection
+     * @param mixed $data
+     * @param mixed $transformer
+     * @return array
+     */
+    function transformCollection($data, $transformer)
+    {
+        return fractal(
+            $data,
+            $transformer
+        )->toArray() ?? [];
     }
 }
