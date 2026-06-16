@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Master extends Model
 {
-    use HasUuids, HasFactory, Asset;
+    use HasUuids, HasFactory;
 
     /**
      * The data type of the auto-incrementing ID.
