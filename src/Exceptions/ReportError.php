@@ -44,22 +44,28 @@ class ReportError extends Exception
         $previous = $this->getPrevious();
 
         $logData = [
+            'user_id' => $user?->id,
+            'user_email' => $user?->email,
+            'ip' => $request->ip(),
+            'method' => $request->method(),
+            'url' => $request->fullUrl(),
+            'route' => optional($request->route())->getName(),
+            'error' => $this->message,
+            'code' => $this->code,
+            'trace' => $this->getTraceAsString(),
+            'headers' => $request->headers->all(),
+            'payload' => $request->all(),
+        ];
+
+        $logData = [
             'trace_id' => $traceId,
             'timestamp' => now()->toIso8601String(),
             'application' => [
                 'env' => app()->environment(),
                 'debug' => config('app.debug'),
-                'url' => config('app.url'),
-            ],
-            'exception' => [
-                'class' => static::class,
-                'message' => $this->message,
-                'code' => $this->code,
-                'file' => $this->getFile(),
-                'line' => $this->getLine(),
-                'trace' => $this->getTrace(),
-                'trace_as_string' => $this->getTraceAsString(),
-                'previous' => $this->formatPreviousException($previous),
+                'method' => $request->method(),
+                'url' => $request->fullUrl(),
+                'route' => optional($request->route())->getName(),
             ],
             'actor' => [
                 'auth_check' => Auth::check(),
@@ -125,6 +131,16 @@ class ReportError extends Exception
             'context' => [
                 'php_version' => PHP_VERSION,
                 'sapi' => PHP_SAPI,
+            ],
+            'exception' => [
+                'class' => static::class,
+                'message' => $this->message,
+                'code' => $this->code,
+                'file' => $this->getFile(),
+                'line' => $this->getLine(),
+                'trace' => $this->getTrace(),
+                'trace_as_string' => $this->getTraceAsString(),
+                'previous' => $this->formatPreviousException($previous),
             ],
         ];
 
